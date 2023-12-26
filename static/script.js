@@ -37,14 +37,12 @@ setInterval(() => {
         },
         body: JSON.stringify({ image: data }),
     })
-    .then(response => {response.json()
-    console.log(response)})
+    .then(response => response.json())
     .then(data => {
         console.log('Image sent successfully:', data);
-
-        
     })
     .catch(error => {
         console.error('Error sending image:', error);
     });
 }, 10000 / FPS);
+
