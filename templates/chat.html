@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="#">
     <style>
       body {
-        background-color: #0022ff;
+        background-color: #961d25;
         margin: 0; /* Remove margin to fill the whole viewport */
       }
 
@@ -74,20 +74,15 @@
   <body>
 
     <div class="button-container">
-      <button id="top" onclick="talk()">Talk</button>
-    </div>
-    <div class="button-container">
-      <button id="botleft" onclick="GetSpeech()">Get Speech</button>
-      <button id="botright" onclick="RepeatSent()">Repeat</button>
-    </div>
-
-    <div id="videoContainer">
-      <video autoplay playsinline id="videoElement"></video>
+        <button id="top" onclick="talk()">Talk</button>
+      </div>
+      <div class="button-container">
+        <button id="botleft" onclick="GetSpeech()">Get Speech</button>
+        <button id="botright" onclick="RepeatSent()">Repeat</button>
     </div>
     
-    <form action="/chat">
+    <form action="/">
     </form>
-    <canvas id="canvas" width="400" height="300" hidden></canvas>
 
     <audio controls id="audioPlayer" hidden>
       <source src="{{url_for('static', filename='alertsound.mp3')}}" type="audio/mpeg">
@@ -95,7 +90,7 @@
 
     <div id="action"></div>
 
-    <script src="{{ url_for('static',filename='script.js') }}"></script>
+    <script src="{{ url_for('static',filename='chat.js') }}"></script>
 
   </body>
 </html>

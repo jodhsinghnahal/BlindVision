@@ -1,11 +1,4 @@
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
-const video = document.getElementById("videoElement");
-const FPS = 1;
 var rec = 'No previous speech entered';
-
-video.width = 400;
-video.height = 300;
 
 var message = 'No speech entered';
 
@@ -22,32 +15,14 @@ function talk() {
     }
 }
 
-if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-          facingMode: 'environment'
-        }
-    })
-        .then(function (stream) {
-            console.log(4)
-         //resolve stream and set the html src of the video and then play video  
-            video.srcObject = stream;
-            video.play();
-        })
-        .catch(function (err0r) {
-         //reject error
-        });
-}
-
-function sendToServer(text, data) {
+function sendToServer(text) {
     // Use HTTP POST to send image and text to the server
     fetch('/upload_image', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ image: data, 'text': text }),
+        body: JSON.stringify({'text': text }),
     })
     .then(response => { console.log(response); return response.json()})
     .then(data => {
@@ -62,11 +37,6 @@ function sendToServer(text, data) {
 function GetSpeech() {
      console.log("clicked microphone");
      message = 'nothing';
-     width = video.width;
-     height = video.height;
-     context.drawImage(video, 0, 0, width, height);
-     var data = canvas.toDataURL('image/jpeg', 0.5);
-     context.clearRect(0, 0, width, height);
 
     const SpeechRecognition =  window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition = new SpeechRecognition();
@@ -97,7 +67,7 @@ function GetSpeech() {
 
             rec=result.results[0][0].transcript;
             console.log(rec);
-            sendToServer(rec, data);
+            sendToServer(rec);
             document.querySelector('button').textContent = rec;
          }
         //desktop only
@@ -123,5 +93,3 @@ document.addEventListener('dblclick', () => {
     window.speechSynthesis.cancel();
     document.querySelector('form').submit();
 });
-
-

@@ -22,6 +22,7 @@ def image():
 
     # Extract the base64-encoded image data
     image_data = data.get("image", "")
+    text = data['text']
 
     # Remove the "data:image/jpeg;base64," prefix
     _, encoded_image = image_data.split(",", 1)
@@ -31,7 +32,6 @@ def image():
 
     # Convert the image bytes to a PIL Image
     image = Image.open(io.BytesIO(image_bytes))
-    image = image.transpose(method=Image.FLIP_LEFT_RIGHT)
 
     # Save the image to a file
     image.save("uploaded_image.jpg")
@@ -71,17 +71,39 @@ def image():
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    # gemini_api_key = os.environ["GOOGLE_API_KEY"]
-    # genai.configure(api_key = gemini_api_key)
+    gemini_api_key = os.environ["GOOGLE_API_KEY"]
+    genai.configure(api_key = gemini_api_key)
 
-    # img = PIL.Image.open('uploaded_image.jpg')
+    img = PIL.Image.open('uploaded_image.jpg')
 
-    # model = genai.GenerativeModel('gemini-pro-vision')
+    model = genai.GenerativeModel('gemini-pro-vision')
 
-    # response = model.generate_content(["what is in this photo", img], stream=True)
-    # response.resolve()
+    print(text)
+    response = model.generate_content([text, img], stream=True)
+    response.resolve()
 
-    return jsonify({'message': 'response.text'})
+    return jsonify({'message': response.text})
+
+@app.route("/chat", methods=['POST', 'GET'])
+def chat():
+    if request.method == 'POST':
+        gemini_api_key = os.environ["GOOGLE_API_KEY"]
+        genai.configure(api_key = gemini_api_key)
+
+        model = genai.GenerativeModel('gemini-pro')
+        chat = model.start_chat(history=[])
+
+        response = chat.send_message(request.args.get('mesg'))
+
+        print(response.text)
+
+        response = chat.send_message("what did i just ask.")
+        print("done")
+
+        print(response.text)
+
+    return render_template("chat.html")
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True, threaded=True)
+    app.run(port=4000, debug=True, threaded=True)
