@@ -13,6 +13,10 @@
     <video id="videoCam"></video>
     <br/><br/>
     <button id="startBtn" onclick="openCam()">Open Camera</button>
+        <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 </body>
 </html> -->
 
@@ -22,33 +26,45 @@
   <head>
     <meta charset="UTF-8">
     <title>Flask Client Camera Web App</title>
-
+    <link rel="shortcut icon" href="#">
     <style>
-    	#video {
-    		transform: rotateY(180deg);
+    	#videoElement {
+    		transform: rotateY(360deg);
     		-webkit-transform:rotateY(180deg); /* Safari and Chrome */
     		-moz-transform:rotateY(180deg); /* Firefox */
-    		
     	}
+
+      button {
+    padding: 10px;
+    background-color: #6a67ce;
+    color: #FFFFFF;
+    border: 0px;
+    cursor: pointer;
+    border-radius: 0;
+    width: 100vw; 
+    height: 100vh; 
+}
+
     </style>
-    <script
-      src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+
   </head>
 
   <body>
 
-    <div id="container">
-      <video autoplay playsinline id="videoElement"></video>
-      <canvas id="canvas" width="400" height="300"></canvas>
-    </div>
+    <video autoplay playsinline id="videoElement" hidden></video>
+    <canvas id="canvas" width="400" height="300" hidden></canvas>
 
-    <div class= 'video'>
-      <img id="photo" width="400" height="300">
-      <!-- <h1>video</h1> -->
-    </div>
+    <input type="text" placeholder="Enter" width="100">
+
+    <audio controls id="audioPlayer" hidden> <source src="{{url_for('static', filename='alertsound.mp3')}}" type="audio/mpeg"> </audio>
+
+    <button onclick="GetSpeech()">Click</button>
+
+    <ul>
+      achbdsk
+    </ul>
+
     <script  src="{{ url_for('static',filename='script.js') }}"></script>
-  </body>
 
+  </body>
 </html>
