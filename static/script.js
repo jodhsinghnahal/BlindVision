@@ -10,6 +10,8 @@ video.height = 300;
 var message = 'No speech entered';
 
 function talk() {
+    window.speechSynthesis.cancel();
+
     if(message == 'nothing'){
         var msg = new SpeechSynthesisUtterance();
         msg.text = 'Still generating';
@@ -60,6 +62,8 @@ function sendToServer(text, data) {
 }
 
 function GetSpeech() {
+    window.speechSynthesis.cancel();
+
      console.log("clicked microphone");
      message = 'nothing';
      width = video.width;
@@ -114,6 +118,8 @@ function GetSpeech() {
 }
 
 function RepeatSent(){
+    window.speechSynthesis.cancel();
+
     var msg = new SpeechSynthesisUtterance();
     msg.text = rec;
     window.speechSynthesis.speak(msg);
@@ -121,7 +127,12 @@ function RepeatSent(){
 
 document.addEventListener('dblclick', () => {
     window.speechSynthesis.cancel();
-    document.querySelector('form').submit();
-});
 
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = 'Window Switched';
+    window.speechSynthesis.speak(msg);
+
+    document.querySelector('form').submit();
+
+});
 

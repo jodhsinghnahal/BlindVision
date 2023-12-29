@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/login" method="post">
+        <input type="text" name="username" id="user">
+        <input type="text" name="password" id="pass">
+        <button>Login</button>
+    </form>
+
+    <form action="/signup" method="post">
+        <input type="text" name="username" id="user1" hidden>
+        <input type="text" name="password" id="pass1" hidden>
+        <button>Sign Up</button>
+    </form>
+
+    <button id="voice1" onclick="UserSpeech()">Voice Username</button>
+    <button id="voice2" onclick="PassSpeech()">Voice Password</button>
+
+    {% if right %}
+            <div>
+                {{right}}
+            </div>
+    {% endif %}
+    
+</body>
+
+<script>
+document.getElementById('user').addEventListener('input', () => {
+    document.getElementById('user1').value = document.getElementById('user').value;
+})
+document.getElementById('pass').addEventListener('input', () => {
+    document.getElementById('pass1').value = document.getElementById('pass').value;
+})
+function UserSpeech() {
+     console.log("clicked microphone");
+    const SpeechRecognition =  window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+        recognition.onspeechend = (event) => {
+            recognition.stop();
+        }
+        recognition.onresult = (result) => {
+            document.getElementById('user').value = result.results[0][0].transcript;
+            document.getElementById('user1').value = result.results[0][0].transcript;
+            rec=result.results[0][0].transcript;
+            console.log(rec);
+         }
+        recognition.start();
+}
+
+function PassSpeech() {
+     console.log("clicked microphone");
+    const SpeechRecognition =  window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+        recognition.onspeechend = (event) => {
+            recognition.stop();
+        }
+        recognition.onresult = (result) => {
+            document.getElementById('pass').value = result.results[0][0].transcript;
+            document.getElementById('pass1').value = result.results[0][0].transcript;
+            rec=result.results[0][0].transcript;
+            console.log(rec);
+         }
+        recognition.start();
+}
+</script>
+</html>

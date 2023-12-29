@@ -40,7 +40,6 @@
         position: relative;
       }
 
-
     #videoElement {
     width: 100%;
     height: 100%; /* Fill the container */
@@ -73,6 +72,7 @@
 
   <body>
 
+    {% if session["username"] %}
     <div class="button-container">
       <button id="top" onclick="talk()">Talk</button>
     </div>
@@ -95,7 +95,13 @@
 
     <div id="action"></div>
 
-    <script src="{{ url_for('static',filename='script.js') }}"></script>
+    <form action="/logout">
+      <button>Logout</button>
+    </form>
 
+    <script src="{{ url_for('static',filename='script.js') }}"></script>
+    {% else %}
+        You are not logged in. <a href="/login">Log in</a>.
+    {% endif %}
   </body>
 </html>

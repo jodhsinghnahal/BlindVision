@@ -35,26 +35,6 @@
         background: linear-gradient(45deg, #2c3e50, #3498db);
       }
 
-      #videoContainer {
-        height: 100vh; /* Set height to fill the whole viewport */
-        position: relative;
-      }
-
-
-    #videoElement {
-    width: 100%;
-    height: 100%; /* Fill the container */
-  }
-
-  @media only screen and (min-width: 1000px) {
-    /* Apply the rotation only on larger screens (adjust the breakpoint as needed) */
-    #videoElement {
-      transform: rotateY(360deg);
-      -webkit-transform: rotateY(180deg); /* Safari and Chrome */
-      -moz-transform: rotateY(180deg); /* Firefox */
-    }
-  }
-
       #canvas {
         width: 100%;
         height: 100%; /* Fill the container */
@@ -72,7 +52,7 @@
   </head>
 
   <body>
-
+    {% if session["username"] %}
     <div class="button-container">
         <button id="top" onclick="talk()">Talk</button>
       </div>
@@ -91,6 +71,10 @@
     <div id="action"></div>
 
     <script src="{{ url_for('static',filename='chat.js') }}"></script>
+    
+    {% else %}
+        You are not logged in. <a href="/login">Log in</a>.
+    {% endif %}
 
   </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect
 from ultralytics import YOLO
 import base64
 import io
@@ -9,12 +9,83 @@ import google.generativeai as genai
 import os
 import PIL.Image
 from gtts import gTTS
+from flask_session import Session
+import sqlite3
+
+gemini_api_key = os.environ["GOOGLE_API_KEY"]
+genai.configure(api_key = gemini_api_key)
 
 app = Flask(__name__)
 
+DATABASE = 'logins.db'
+
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
 @app.route("/")
 def main():
+    print(session.get("username"))
+    if not session.get("username"):
+        return redirect("/login")
     return render_template("camera.html")
+
+def connect_db():
+    return sqlite3.connect(DATABASE)
+
+@app.route("/logout")
+def logout():
+    session["username"] = None
+    return redirect("/")
+
+@app.route("/signup", methods=["POST", "GET"])
+def signup():
+    db = connect_db()
+    cursor = db.cursor()
+    print(request.form.get("username"))
+    count = cursor.execute("SELECT COUNT(*) FROM users WHERE username = ?", (request.form.get("username"),)).fetchone()[0]
+    db.close()
+    if(count > 0):
+        right="Username already taken"
+        return render_template("login.html", right=right)
+    db = connect_db()
+    cursor = db.cursor()
+    print(request.form.get("username"))
+    if (not request.form.get("username")) or (not request.form.get("password")):
+        db.close()
+        right = "No password or username entered"
+        return render_template("login.html", right=right)
+    
+    cursor.execute("INSERT INTO users (username, password) VALUES(?, ?)", (request.form.get("username"),request.form.get("password")))
+    db.commit()
+    db.close()
+    session["username"] = request.form.get("username")
+
+    return redirect('/')
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        db = connect_db()
+        cursor = db.cursor()
+        print("Username is", request.form.get("username"))
+        if (not request.form.get("username")) or (not request.form.get("password")):
+            db.close()
+            right = "No password or username entered"
+            return render_template("login.html", right=right)
+        password = cursor.execute("SELECT password FROM users WHERE username = ?", (request.form.get("username"),)).fetchone()
+        if not password:
+            right = "Incorrect Password or Username"
+            return render_template("login.html", right=right)
+        password = password[0]
+        db.close()
+        print(password)
+        if(password != request.form.get("password")):
+            right = "Incorrect Password or Username"
+            return render_template("login.html", right=right)
+        session["username"] = request.form.get("username")
+        return redirect("/")
+    return render_template("login.html")
 
 @app.route("/upload_image", methods=["POST"])
 def image():
@@ -71,38 +142,29 @@ def image():
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    gemini_api_key = os.environ["GOOGLE_API_KEY"]
-    genai.configure(api_key = gemini_api_key)
-
     img = PIL.Image.open('uploaded_image.jpg')
 
     model = genai.GenerativeModel('gemini-pro-vision')
 
-    print(text)
+    print("hello", text)
     response = model.generate_content([text, img], stream=True)
     response.resolve()
+    print("done", text)
 
     return jsonify({'message': response.text})
 
 @app.route("/chat", methods=['POST', 'GET'])
 def chat():
     if request.method == 'POST':
-        gemini_api_key = os.environ["GOOGLE_API_KEY"]
-        genai.configure(api_key = gemini_api_key)
+        data = request.json
 
         model = genai.GenerativeModel('gemini-pro')
-        chat = model.start_chat(history=[])
 
-        response = chat.send_message(request.args.get('mesg'))
 
-        print(response.text)
+        return jsonify({'message': response.text})
 
-        response = chat.send_message("what did i just ask.")
-        print("done")
-
-        print(response.text)
-
-    return render_template("chat.html")
+    else:
+        return render_template("chat.html")
 
 
 if __name__ == "__main__":

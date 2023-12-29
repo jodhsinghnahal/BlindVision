@@ -1,8 +1,9 @@
 var rec = 'No previous speech entered';
-
 var message = 'No speech entered';
 
 function talk() {
+    window.speechSynthesis.cancel();
+
     if(message == 'nothing'){
         var msg = new SpeechSynthesisUtterance();
         msg.text = 'Still generating';
@@ -17,7 +18,7 @@ function talk() {
 
 function sendToServer(text) {
     // Use HTTP POST to send image and text to the server
-    fetch('/upload_image', {
+    fetch('/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -35,6 +36,8 @@ function sendToServer(text) {
 }
 
 function GetSpeech() {
+    window.speechSynthesis.cancel();
+
      console.log("clicked microphone");
      message = 'nothing';
 
@@ -43,7 +46,6 @@ function GetSpeech() {
 
     recognition.continuous = false;
     recognition.interimResults = false;
-
 
     var action = document.getElementById("action");
 
@@ -84,6 +86,8 @@ function GetSpeech() {
 }
 
 function RepeatSent(){
+    window.speechSynthesis.cancel();
+
     var msg = new SpeechSynthesisUtterance();
     msg.text = rec;
     window.speechSynthesis.speak(msg);
@@ -91,5 +95,11 @@ function RepeatSent(){
 
 document.addEventListener('dblclick', () => {
     window.speechSynthesis.cancel();
+
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = 'Window Switched';
+    window.speechSynthesis.speak(msg);
+
     document.querySelector('form').submit();
+
 });
