@@ -160,6 +160,36 @@ def chat():
 
         model = genai.GenerativeModel('gemini-pro')
 
+        db = connect_db()
+        cursor = db.cursor()
+        hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC LIMIT 50", (session["username"],)).fetchall()
+        db.close()
+        print(hist)
+        # history = [{'parts': [parts], 'role': role} for parts, role in hist]
+        history=[]
+        for mes in hist:
+            print(mes[1])
+            print(mes[0])
+            history.append({'parts': mes[1], 'role': 'user'})
+            history.append({'parts': mes[0], 'role': 'model'})
+        # Start the chat with the updated history
+        aichat = model.start_chat(history=history)
+
+        response = aichat.send_message(data.get("text"))
+
+        # for mes in aichat.history:
+        #     print(mes)
+        # print(aichat.history)
+
+        db = connect_db()
+        cursor = db.cursor()
+        parts = response.text;
+        role = data.get("text")
+        print(parts)
+        print(role)
+        cursor.execute("INSERT INTO user_data (user_id, parts, role) VALUES ((SELECT id from users where username = ?), ?, ?)", (session["username"],parts, role))
+        db.commit()
+        db.close()
 
         return jsonify({'message': response.text})
 
