@@ -38,23 +38,22 @@
         #password-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 1px;;
             padding: 0;
             flex: 1;
             margin-top: 20px;
-			margin-bottom: 20px;
+			    margin-bottom: 1px;
+          height: 62vh;
+          width: 100vw;
         }
 
         .password-btn {
-            width: 100%;
-            height: 100%;
             font-size: 28px;
             cursor: pointer;
             transition: background-color 0.3s;
             border: 1px solid #ccc;
             border-radius: 10px;
             background-color: #fff;
-			height: 6vh;
         }
 
         .password-btn:hover {
@@ -68,6 +67,11 @@
             flex: 1;
         }
 
+        #controlconatainer{
+          margin: 0 auto;
+          justify-content: center;
+        }
+
         .control-btn {
             padding: 16px;
             font-size: 18px;
@@ -77,6 +81,9 @@
             border-radius: 10px;
             background-color: #61dafb;
             color: #fff;
+            height: 8vh;
+            width: 32vw;
+            margin: 1px;
         }
 
         .control-btn:hover {
@@ -95,6 +102,80 @@
 			white-space: nowrap; 
 			text-overflow: ellipsis;
 		}
+
+
+    #speech::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 80%;
+  background-image: url("{{ url_for('static', filename='free-microphone-icon-342-thumb.png') }}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#talk::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 80%;
+  background-image: url("{{ url_for('static', filename='talk.png') }}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#send::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 80%;
+  background-image: url("{{ url_for('static', filename='send.png') }}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#clear::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 80%;
+  background-image: url("{{ url_for('static', filename='clear.svg') }}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#back::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 80%;
+  background-image: url("{{ url_for('static', filename='back.png') }}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#repeat::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 80%;
+  background-image: url("{{ url_for('static', filename='repeat.png') }}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#space{
+  width: 100vw;
+  height: 6vh;
+  font-size: 20px;
+}
+
     </style>
   </head>
 
@@ -110,49 +191,27 @@
   
       <div id="password-container">
 
-      <button class="password-btn">A</button>
-      <button class="password-btn">B</button>
-      <button class="password-btn">C</button>
-      <button class="password-btn">D</button>
-      <button class="password-btn">E</button>
-      <button class="password-btn">F</button>
-      <button class="password-btn">G</button>
-      <button class="password-btn">H</button>
-      <button class="password-btn">I</button>
-      <button class="password-btn">J</button>
-      <button class="password-btn">K</button>
-      <button class="password-btn">L</button>
-      <button class="password-btn">M</button>
-      <button class="password-btn">N</button>
-      <button class="password-btn">O</button>
-      <button class="password-btn">P</button>
-      <button class="password-btn">Q</button>
-      <button class="password-btn">R</button>
-      <button class="password-btn">S</button>
-      <button class="password-btn">T</button>
-      <button class="password-btn">U</button>
-      <button class="password-btn">V</button>
-      <button class="password-btn">W</button>
-      <button class="password-btn">X</button>
-      <button class="password-btn">Y</button>
-      <button class="password-btn">Z</button>
+      {% for letter in letters %}
+      <button class="password-btn" id = {{letter}}>{{ letter }}</button>
+      {% endfor %}
   
-      <!-- <button class="password-btn">1</button>
-      <button class="password-btn">2</button>
-      <button class="password-btn">3</button>
-      <button class="password-btn">4</button> -->
-      </div>
-  
-      <div>
-          <button class="control-btn" onclick="deleteLastCharacter()">Delete</button>
-          <button class="control-btn" onclick="clearPassword()">Clear</button>
-          <button class="control-btn" id="speech" onclick="GetSpeech()">Get Speech</button>
-          <button class="control-btn" id="repeat" onclick="RepeatSent()">Repeat</button>
-          <button class="control-btn" id="server" onclick="serverMsg()">Send Message</button>
-          <button class="control-btn" id="top" onclick="talk()">Talk</button>
+      <button class="password-btn" id="123">123</button>
       </div>
 
-      <div id="display-password" hidden></div>
+      <button id="space" onclick="space()">space</button>
+
+        <div id="controlconatainer">
+            <button class="control-btn" onclick="deleteLastCharacter()" id="back"></button>
+            <button class="control-btn" onclick="clearPassword()" id = "clear"></button>
+            <button class="control-btn" id="speech" onclick="GetSpeech()"></button>
+        </div>
+        <div id="controlconatainer">
+          <button class="control-btn" id="repeat" onclick="RepeatSent()"></button>
+          <button class="control-btn" id="send" onclick="serverMsg()"></button>
+          <button class="control-btn" id="talk" onclick="talk()"></button>
+        </div>
+
+      <div id="display-password" ></div>
 
       <div id="videoContainer">
           <video autoplay playsinline id="videoElement"></video>
@@ -163,12 +222,48 @@
   
           document.getElementById('password-container').addEventListener('click', function (event) {
               if (event.target.classList.contains('password-btn')) {
-                  var clickedButton = event.target.textContent;
-                  displayPassword.textContent += clickedButton;
+                var clickedButton = event.target.textContent;
+                var msg = new SpeechSynthesisUtterance();
+                const nletrs = 26;
+                if(clickedButton == '123'){
+                  letter = 'a';
+                  document.getElementById('123').textContent = 'abc';
+                  let nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '/', ':', ';', '(', ')', '$', '&', '@', '"', '.', ',', '?', '!', '#' ,"'"]
+                  console.log(nums.length);
+                  for (let index = 0; index < nletrs; index++) {
+                    document.getElementById(letter).textContent = nums[index];
+                    letter = String.fromCharCode(letter.charCodeAt(0) + 1);
+                  }
+                msg.text = 'number and special character keys';
+                window.speechSynthesis.speak(msg);
+                }
+                else if (clickedButton == 'abc') {
+                  document.getElementById('123').textContent = '123';
+                  letter = 'a';
+                  for (let index = 0; index < nletrs; index++) {
+                    document.getElementById(letter).textContent = letter;
+                    letter = String.fromCharCode(letter.charCodeAt(0) + 1);
+                  }
+                msg.text = 'letter keys';
+                window.speechSynthesis.speak(msg);
+                }
+                else{
+                msg.text = clickedButton;
+                window.speechSynthesis.speak(msg);
+                displayPassword.textContent += clickedButton;
+                }
               }
           });
+
+          function space(){
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = 'space'
+            window.speechSynthesis.speak(msg);
+            displayPassword.textContent += ' ';
+          }
   
           function deleteLastCharacter() {
+              window.speechSynthesis.cancel();
               var msg = new SpeechSynthesisUtterance();
               msg.text = 'delete';
               window.speechSynthesis.speak(msg);
@@ -177,6 +272,7 @@
           }
   
           function clearPassword() {
+              window.speechSynthesis.cancel();
               var msg = new SpeechSynthesisUtterance();
               msg.text = 'clear';
               window.speechSynthesis.speak(msg);

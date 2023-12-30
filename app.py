@@ -11,6 +11,9 @@ import PIL.Image
 from gtts import gTTS
 from flask_session import Session
 import sqlite3
+import string
+
+letters_a_to_z = list(string.ascii_lowercase)
 
 gemini_api_key = os.environ["GOOGLE_API_KEY"]
 genai.configure(api_key = gemini_api_key)
@@ -28,7 +31,7 @@ def main():
     print(session.get("username"))
     if not session.get("username"):
         return redirect("/login")
-    return render_template("camera.html")
+    return render_template("camera.html", letters= letters_a_to_z)
 
 def connect_db():
     return sqlite3.connect(DATABASE)
@@ -47,14 +50,14 @@ def signup():
     db.close()
     if(count > 0):
         right="Username already taken"
-        return render_template("login.html", right=right)
+        return render_template("login.html", right=right, letters=letters_a_to_z)
     db = connect_db()
     cursor = db.cursor()
     print(request.form.get("username"))
     if (not request.form.get("username")) or (not request.form.get("password")):
         db.close()
-        right = "No password or username entered"
-        return render_template("login.html", right=right)
+        right = "Retry"
+        return render_template("login.html", right=right, letters=letters_a_to_z)
     
     cursor.execute("INSERT INTO users (username, password) VALUES(?, ?)", (request.form.get("username"),request.form.get("password")))
     db.commit()
@@ -71,21 +74,21 @@ def login():
         print("Username is", request.form.get("username"))
         if (not request.form.get("username")) or (not request.form.get("password")):
             db.close()
-            right = "No password or username entered"
-            return render_template("login.html", right=right)
+            right = "Retry"
+            return render_template("login.html", right=right, letters=letters_a_to_z)
         password = cursor.execute("SELECT password FROM users WHERE username = ?", (request.form.get("username"),)).fetchone()
         if not password:
-            right = "Incorrect Password or Username"
-            return render_template("login.html", right=right)
+            right = "Incorrect"
+            return render_template("login.html", right=right, letters=letters_a_to_z)
         password = password[0]
         db.close()
         print(password)
         if(password != request.form.get("password")):
-            right = "Incorrect Password or Username"
-            return render_template("login.html", right=right)
+            right = "Incorrect"
+            return render_template("login.html", right=right, letters=letters_a_to_z)
         session["username"] = request.form.get("username")
         return redirect("/")
-    return render_template("login.html")
+    return render_template("login.html", letters=letters_a_to_z)
 
 @app.route("/upload_image", methods=["POST"])
 def image():
@@ -162,18 +165,19 @@ def chat():
 
         db = connect_db()
         cursor = db.cursor()
-        hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC LIMIT 50", (session["username"],)).fetchall()
+        #parts = model message, role=user messsage
+        hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC LIMIT 10", (session["username"],)).fetchall()
         db.close()
         print(hist)
         # history = [{'parts': [parts], 'role': role} for parts, role in hist]
-        history=[]
+        history_=[]
         for mes in hist:
             print(mes[1])
             print(mes[0])
-            history.append({'parts': mes[1], 'role': 'user'})
-            history.append({'parts': mes[0], 'role': 'model'})
+            history_.append({'parts': mes[1], 'role': 'user'})
+            history_.append({'parts': mes[0], 'role': 'model'}) 
         # Start the chat with the updated history
-        aichat = model.start_chat(history=history)
+        aichat = model.start_chat(history=history_)
 
         response = aichat.send_message(data.get("text"))
 
@@ -194,8 +198,16 @@ def chat():
         return jsonify({'message': response.text})
 
     else:
-        return render_template("chat.html")
-
+        return render_template("chat.html", letters=letters_a_to_z)
+    
+@app.route("/hist")
+def hist():
+    db = connect_db()
+    cursor = db.cursor()
+    #parts = model message, role=user messsage
+    hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC", (session["username"],)).fetchall()
+    db.close()
+    return render_template("chatHist.html", chat_history=hist)
 
 if __name__ == "__main__":
     app.run(port=4000, debug=True, threaded=True)

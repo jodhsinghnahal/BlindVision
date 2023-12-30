@@ -1,5 +1,5 @@
-var rec = 'No previous speech entered';
-var message = 'No speech entered';
+var txt = document.getElementById('display-password').textContent;
+var message = 'No message sent';
 
 function talk() {
     window.speechSynthesis.cancel();
@@ -27,11 +27,11 @@ function sendToServer(text) {
     })
     .then(response => { console.log(response); return response.json()})
     .then(data => {
-        console.log('Image sent successfully:', data);
+        console.log('text sent successfully:', data);
         message = data['message'];
     })
     .catch(error => {
-        console.error('Error sending image:', error);
+        console.error('Error sending text:', error);
     });
 }
 
@@ -39,7 +39,6 @@ function GetSpeech() {
     window.speechSynthesis.cancel();
 
      console.log("clicked microphone");
-     message = 'nothing';
 
     const SpeechRecognition =  window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition = new SpeechRecognition();
@@ -47,30 +46,16 @@ function GetSpeech() {
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    var action = document.getElementById("action");
-
         recognition.onstart = () => {
-            action.innerHTML = "<small>listening, please speak...</small>";
-
-            console.log("starting listening, speak in microphone");
-            document.querySelector('button').textContent = "starting listening, speak in microphone";
+            console.log("start");
         }
         recognition.onspeechend = (event) => {
-            document.querySelector('button').textContent = 'jwhvwcknjwn';
-
             console.log("stopped listening");
-            document.querySelector('button').textContent = "stopped listening";
             recognition.stop();
         }
         recognition.onresult = (result) => {
-            action.innerHTML = "<small> done...</small>";
-
-            document.querySelector('button').textContent = result.results[0][0].transcript;
-
-            rec=result.results[0][0].transcript;
-            console.log(rec);
-            sendToServer(rec);
-            document.querySelector('button').textContent = rec;
+            document.getElementById('display-password').textContent = result.results[0][0].transcript;
+            // sendToServer(rec, data);
          }
         //desktop only
         //  recognition.onend = function(event) {
@@ -85,12 +70,31 @@ function GetSpeech() {
         recognition.start();
 }
 
-function RepeatSent(){
+function serverMsg(){
     window.speechSynthesis.cancel();
+    message = 'nothing';
 
     var msg = new SpeechSynthesisUtterance();
-    msg.text = rec;
+    msg.text = 'sent message';
     window.speechSynthesis.speak(msg);
+
+    txt = document.getElementById('display-password').textContent;
+    sendToServer(txt);
+}
+
+function RepeatSent(){
+    window.speechSynthesis.cancel();
+    the_mes = document.getElementById('display-password').textContent;
+    if (the_mes == ''){
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = 'nothing entered';
+        window.speechSynthesis.speak(msg);
+    }
+    else{
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = the_mes;
+        window.speechSynthesis.speak(msg);
+    }
 }
 
 document.addEventListener('dblclick', () => {
