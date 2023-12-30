@@ -1,74 +1,161 @@
-<!doctype html>
-	<head>
-		<style>
-			/* CSS comes here */
-			body {
-			    font-family: arial;
-			}
-			button {
-			    padding:10px;
-			    background-color:#6a67ce;
-			    color: #FFFFFF;
-			    border: 0px;
-			    cursor:pointer;
-			    border-radius: 5px;
-			}
-			#output {
-			    background-color:#F9F9F9;
-			    padding:10px;
-			    width: 100%;
-			    margin-top:20px;
-			    line-height:30px;
-			}
-			.hide {
-			    display:none;
-			}
-			.show {
-			    display:block;
-			}
-		</style>
-		<title>JavaScript Speech to Text</title>
-	</head>
-	<body>
-		<h2>JavaScript Speech to Text</h2>
-        <p>Click on the below button and speak something...</p>
-        <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
-        <div id="output" class="hide"></div>
-		<script>
-			/* JS comes here */
-		    function runSpeechRecognition() {
-		        // get output div reference
-		        var output = document.getElementById("output");
-		        // get action element reference
-		        var action = document.getElementById("action");
-                // new speech recognition object
-                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-                var recognition = new SpeechRecognition();
-            
-                // This runs when the speech recognition service starts
-                recognition.onstart = function() {
-                    action.innerHTML = "<small>listening, please speak...</small>";
-                };
-                
-                recognition.onspeechend = function() {
-                    action.innerHTML = "<small>stopped listening, hope you are done...</small>";
-                    recognition.stop();
-                }
-              
-                // This runs when the speech recognition service returns result
-                recognition.onresult = function(event) {
-                    var msg = new SpeechSynthesisUtterance();
-                                    msg.text = 'No speech was recognized';
-                                    window.speechSynthesis.speak(msg);
-                    var transcript = event.results[0][0].transcript;
-                    var confidence = event.results[0][0].confidence;
-                    output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence*100+"%";
-                    output.classList.remove("hide");
-                };
-              
-                 // start recognition
-                 recognition.start();
-	        }
-		</script>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Entry</title>
+    <style>
+        /* body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        } */
+		body {
+        background-color: #0022ff;
+        margin: 0; /* Remove margin to fill the whole viewport */
+		overflow: hidden;
+      }
+
+        #password-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0;
+            flex: 1;
+            margin-top: 20px;
+			margin-bottom: 20px;
+        }
+
+        .password-btn {
+            width: 100%;
+            height: 100%;
+            font-size: 28px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+			height: 6vh;
+        }
+
+        .password-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        #display-password {
+            margin: 20px 0;
+            font-size: 28px;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .control-btn {
+            padding: 16px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #61dafb;
+            color: #fff;
+        }
+
+        .control-btn:hover {
+            background-color: #4fa3d1;
+        }
+		
+		#display-password {
+			margin: 0px 0;
+			margin-left: 5px;
+			margin-right: 5px;
+			margin-top: 5px;
+			font-size: 28px;
+			font-weight: bold;
+			flex: 1;
+			overflow: hidden; 
+			white-space: nowrap; 
+			text-overflow: ellipsis;
+		}
+    </style>
+</head>
+<body>
+	<div id="display-password"></div>
+
+	<form action="">
+		<input type="text">
+	</form>
+
+    <div id="password-container">
+        <!-- Alphabet Buttons -->
+		<button class="password-btn">A</button>
+		<button class="password-btn">B</button>
+		<button class="password-btn">C</button>
+		<button class="password-btn">D</button>
+		<button class="password-btn">E</button>
+		<button class="password-btn">F</button>
+		<button class="password-btn">G</button>
+		<button class="password-btn">H</button>
+		<button class="password-btn">I</button>
+		<button class="password-btn">J</button>
+		<button class="password-btn">K</button>
+		<button class="password-btn">L</button>
+		<button class="password-btn">M</button>
+		<button class="password-btn">N</button>
+		<button class="password-btn">O</button>
+		<button class="password-btn">P</button>
+		<button class="password-btn">Q</button>
+		<button class="password-btn">R</button>
+		<button class="password-btn">S</button>
+		<button class="password-btn">T</button>
+		<button class="password-btn">U</button>
+		<button class="password-btn">V</button>
+		<button class="password-btn">W</button>
+		<button class="password-btn">X</button>
+		<button class="password-btn">Y</button>
+		<button class="password-btn">Z</button>
+
+		<!-- Number Buttons -->
+		<!-- <button class="password-btn">1</button>
+		<button class="password-btn">2</button>
+		<button class="password-btn">3</button>
+		<button class="password-btn">4</button> -->
+        <!-- Add more number buttons as needed -->
+    </div>
+
+
+    <!-- Control Buttons -->
+    <div>
+        <button class="control-btn" onclick="deleteLastCharacter()">Delete</button>
+        <button class="control-btn" onclick="clearPassword()">Clear</button>
+    </div>
+
+    <script>
+        var displayPassword = document.getElementById('display-password');
+
+        document.getElementById('password-container').addEventListener('click', function (event) {
+            if (event.target.classList.contains('password-btn')) {
+                var clickedButton = event.target.textContent;
+                displayPassword.textContent += clickedButton;
+            }
+        });
+
+        function deleteLastCharacter() {
+            var currentPassword = displayPassword.textContent;
+            displayPassword.textContent = currentPassword.slice(0, -1);
+        }
+
+        function clearPassword() {
+            displayPassword.textContent = '';
+        }
+    </script>
+
+</body>
 </html>
