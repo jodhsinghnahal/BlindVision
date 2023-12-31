@@ -15,6 +15,7 @@ import string
 
 letters_a_to_z = list(string.ascii_lowercase)
 
+os.environ["GOOGLE_API_KEY"] = "AIzaSyCo9spIoq3yjvQR0U-QWtaTXD8PbJtmEJA"
 gemini_api_key = os.environ["GOOGLE_API_KEY"]
 genai.configure(api_key = gemini_api_key)
 
@@ -150,11 +151,14 @@ def image():
     model = genai.GenerativeModel('gemini-pro-vision')
 
     print("hello", text)
-    response = model.generate_content([text, img], stream=True)
-    response.resolve()
-    print("done", text)
+    try:
+        response = model.generate_content([text, img], stream=True)
+        response.resolve()
+        print("done", text)
 
-    return jsonify({'message': response.text})
+        return jsonify({'message': response.text})
+    except:
+        return jsonify({'message': 'error'})
 
 @app.route("/chat", methods=['POST', 'GET'])
 def chat():
@@ -177,36 +181,44 @@ def chat():
             history_.append({'parts': mes[1], 'role': 'user'})
             history_.append({'parts': mes[0], 'role': 'model'}) 
         # Start the chat with the updated history
-        aichat = model.start_chat(history=history_)
+        
+        try:
+            aichat = model.start_chat(history=history_)
 
-        response = aichat.send_message(data.get("text"))
+            response = aichat.send_message(data.get("text"))
 
-        # for mes in aichat.history:
-        #     print(mes)
-        # print(aichat.history)
+            # for mes in aichat.history:
+            #     print(mes)
+            # print(aichat.history)
 
-        db = connect_db()
-        cursor = db.cursor()
-        parts = response.text;
-        role = data.get("text")
-        print(parts)
-        print(role)
-        cursor.execute("INSERT INTO user_data (user_id, parts, role) VALUES ((SELECT id from users where username = ?), ?, ?)", (session["username"],parts, role))
-        db.commit()
-        db.close()
+            db = connect_db()
+            cursor = db.cursor()
+            parts = response.text;
+            role = data.get("text")
+            print(parts)
+            print(role)
+            cursor.execute("INSERT INTO user_data (user_id, parts, role) VALUES ((SELECT id from users where username = ?), ?, ?)", (session["username"],parts, role))
+            db.commit()
+            db.close()
 
-        return jsonify({'message': response.text})
+            return jsonify({'message': response.text})
+        except:
+            return jsonify({'message': 'error'})
 
     else:
         return render_template("chat.html", letters=letters_a_to_z)
     
 @app.route("/hist")
 def hist():
+    if(not 'username' in session):
+        return redirect('/')
+    
     db = connect_db()
     cursor = db.cursor()
     #parts = model message, role=user messsage
     hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC", (session["username"],)).fetchall()
-    db.close()
+    db.close()        
+    
     return render_template("chatHist.html", chat_history=hist)
 
 if __name__ == "__main__":

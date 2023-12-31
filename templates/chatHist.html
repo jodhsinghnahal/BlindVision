@@ -7,6 +7,9 @@
     <title>BlindVision</title> 
 </head>
 <body>
+    <form action="/">
+    </form>
+    
     <div class="container">
         <table class="table table-bordered table-hover table-striped table-responsive" id="speechTable">
             <thead>
@@ -16,23 +19,24 @@
                 </tr>
             </thead>
             <tbody>
-                {% set count = 1 %}
-                            
                 {% for mesg in chat_history %}
                 <tr class="speakable-row">
-                    <td class="speakable-data" data-role="User" data-message="{{ mesg[1] }}" id="{{count}}">User</td>
-                    <td class="speakable-data" data-role="User" data-message="{{ mesg[1] }} " id="{{count}}"> {{ mesg[1] }}</td>
+                    <td class="speakable-data" data-role="User" data-message="{{ mesg[1] }}" >User</td>
+                    <td class="speakable-data" data-role="User" data-message="{{ mesg[1] }} " > {{ mesg[1] }}</td>
                 </tr>
                 <tr class="speakable-row">
-                    <td class="speakable-data" data-role="Model" data-message="{{ mesg[0] }}" id="{{count}"}>Model</td>
-                    <td class="speakable-data" data-role="Model" data-message="{{ mesg[0] }}" id="{{count}}"> {{ mesg[0] }}</td>
+                    <td class="speakable-data" data-role="Model" data-message="{{ mesg[0] }}" >Model</td>
+                    <td class="speakable-data" data-role="Model" data-message="{{ mesg[0] }}" > {{ mesg[0] }}</td>
                 </tr>
-                {% set count = count + 1 %}
                 {% endfor %}
             </tbody>
         </table>
 
-        <button class="btn btn-danger" id="stopSpeech">Stop Speaking</button>
+        <button class="btn btn-danger" id="stopSpeech" style="margin-bottom: 10px;">Stop Speaking</button>
+
+        <form action="/logout" >
+            <button class="btn btn-danger">Logout</button>
+          </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -50,7 +54,31 @@
                 row.addEventListener('click', function () {
                     const role = this.querySelector('.speakable-data').getAttribute('data-role');
                     const message = this.querySelector('.speakable-data').getAttribute('data-message');
+                    const rolemesid = this.querySelector('.speakable-data').getAttribute('id');
+                    // console.log(role);
+                    // console.log(message);
+                    console.log(rolemesid);
+                    // console.log("{{ max }}");
+                    // console.log('M',m);
+
+                    // let chath = JSON.stringify('{{ chat_history|tojson|safe }}');
+
+                    // // Using for...of loop
+                    // for (const element of chath) {
+                    //     console.log(element);
+                    // }
+                    
+                    // console.log(chath)
+                
+                    // for (let i = rolemesid; i < m; i++) {
+                    //     const elementId = i.toString();  
+                    //     const speakableDataElement = document.getElementById(elementId).textContent;
+                    //     //console.log(`Element with ID ${elementId}:`, speakableDataElement);
+                    //     conv += speakableDataElement;
+                    // }
+                    // console.log(conv);
                     speak(`${role}: ${message}`);
+
                 });
             });
 
@@ -93,6 +121,18 @@
                 window.speechSynthesis.cancel();
             }
         });
+
+        document.addEventListener('dblclick', () => {
+            window.speechSynthesis.cancel();
+
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = 'Window Switched';
+            window.speechSynthesis.speak(msg);
+
+            document.querySelector('form').submit();
+
+        });
+
     </script>
 </body>
 </html>

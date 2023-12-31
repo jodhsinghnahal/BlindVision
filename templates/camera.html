@@ -9,17 +9,23 @@
       body {
         background-color: #0022ff;
         margin: 0; 
+        overflow: hidden;
       }
 
       #videoContainer {
-        height: 100vh; 
-        position: relative;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; 
       }
 
-    #videoElement {
-    width: 100%;
-    height: 100%; /* Fill the container */
-  }
+      #videoElement {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+      }
 
   @media only screen and (min-width: 1000px) {
     /* Apply the rotation only on larger screens (adjust the breakpoint as needed) */
@@ -101,6 +107,9 @@
 			overflow: hidden; 
 			white-space: nowrap; 
 			text-overflow: ellipsis;
+      background-color: #0800ff;
+      width: fit-content;
+      color: white;
 		}
 
 
@@ -170,9 +179,10 @@
   background-position: center;
 }
 
+
 #space{
   width: 100vw;
-  height: 6vh;
+  height: 7.5vh;
   font-size: 20px;
 }
 
@@ -185,7 +195,7 @@
     </form>
     <canvas id="canvas" width="400" height="300" hidden></canvas>
 
-    <form action="/logout" hidden>
+    <form action="/logout"hidden >
       <button>Logout</button>
     </form>
   
@@ -203,15 +213,16 @@
         <div id="controlconatainer">
             <button class="control-btn" onclick="deleteLastCharacter()" id="back"></button>
             <button class="control-btn" onclick="clearPassword()" id = "clear"></button>
-            <button class="control-btn" id="speech" onclick="GetSpeech()"></button>
+            <button class="control-btn" id="speech" onclick="GetSpeech()" hidden></button>
+            <button class="control-btn" onclick="stopSpeaking()" style="color: blue;">STOP</button>
         </div>
         <div id="controlconatainer">
-          <button class="control-btn" id="repeat" onclick="RepeatSent()"></button>
-          <button class="control-btn" id="send" onclick="serverMsg()"></button>
-          <button class="control-btn" id="talk" onclick="talk()"></button>
+          <button class="control-btn" id="repeat" onclick="RepeatSent()" hidden></button>
+          <button class="control-btn" id="send" onclick="serverMsg()" hidden></button>
+          <button class="control-btn" id="talk" onclick="talk()" hidden></button>
         </div>
 
-      <div id="display-password" ></div>
+        <div id="display-password">Click a Button to Begin</div>
 
       <div id="videoContainer">
           <video autoplay playsinline id="videoElement"></video>
@@ -219,6 +230,10 @@
 
       <script>
           var displayPassword = document.getElementById('display-password');
+          let touchstartX = 0;
+            let touchendX = 0;
+            let touchstartY = 0;
+            let touchendY = 0;
   
           document.getElementById('password-container').addEventListener('click', function (event) {
               if (event.target.classList.contains('password-btn')) {
@@ -279,6 +294,73 @@
               var currentPassword = displayPassword.textContent;
               displayPassword.textContent = '';
           }
+
+          document.addEventListener('touchstart', function (event) {
+                touchstartX = event.touches[0].clientX;
+                touchstartY = event.touches[0].clientY;
+            });
+
+            document.addEventListener('touchend', function (event) {
+                touchendX = event.changedTouches[0].clientX;
+                touchendY = event.changedTouches[0].clientY;
+                 handleSwipe();
+            });
+
+            document.addEventListener('keydown', function (event) {
+                // right)
+                if (event.keyCode === 39) {
+                    document.getElementById('send').click();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                // left
+                if (event.keyCode === 37) {
+                    document.getElementById('talk').click();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                // down
+                if (event.keyCode === 40) {
+                    document.getElementById('repeat').click();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                // up
+                if (event.keyCode === 38) {
+                    document.getElementById('speech').click();
+                }
+            });
+
+            function handleSwipe() {
+                let minSwipeDistance = 50;
+                let swipeDistance = touchendX - touchstartX;
+
+                //right swipe
+                if (swipeDistance > minSwipeDistance) {
+                    document.getElementById('talk').click();
+                } else if (swipeDistance < -minSwipeDistance) {
+                    //left swipe
+                    document.getElementById('send').click();
+                }
+
+                let minSwipeDistance2 = 50;
+                let swipeDistance2 = touchendY - touchstartY;
+
+                if (swipeDistance2 > minSwipeDistance2) {
+                    document.getElementById('speech').click();
+                } else if (swipeDistance2 < -minSwipeDistance2) {
+                    document.getElementById('repeat').click();
+                }
+            }
+            function stopSpeaking() {
+              window.speechSynthesis.cancel();
+              var msg = new SpeechSynthesisUtterance();
+              msg.text = 'STOP';
+              window.speechSynthesis.speak(msg);
+            }
       </script>
 
     <script src="{{ url_for('static',filename='script.js') }}"></script>

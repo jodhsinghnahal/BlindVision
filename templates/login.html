@@ -3,35 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>BlindVision</title>
     <style>
-              body {
+        body {
+        overflow: hidden;
         background-color: #0022ff;
         margin: 0; 
-      }
-
-      #videoContainer {
-        height: 100vh; 
-        position: relative;
-      }
-
-    #videoElement {
-    width: 100%;
-    height: 100%; /* Fill the container */
-  }
-
-  @media only screen and (min-width: 1000px) {
-    /* Apply the rotation only on larger screens (adjust the breakpoint as needed) */
-    #videoElement {
-      transform: rotateY(360deg);
-      -webkit-transform: rotateY(180deg); /* Safari and Chrome */
-      -moz-transform: rotateY(180deg); /* Firefox */
-    }
-  }
-
-      #canvas {
-        width: 100%;
-        height: 100%; 
       }
 
         #password-container {
@@ -244,8 +221,8 @@ form:nth-child(2) {
     </div>
 
     <div id="controlconatainer">
-        <button class="control-btn" onclick="deleteLastCharacter()" id="back"></button>
-        <button class="control-btn" onclick="clearPassword()" id = "clear"></button>
+        <button class="control-btn" onclick="deleteLastCharacter()" id="back" hidden></button>
+        <button class="control-btn" onclick="clearPassword()" id = "clear" hidden></button>
         {% if right %}
         {{right}}
      {% endif %}

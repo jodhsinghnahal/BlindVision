@@ -72,6 +72,7 @@ function GetSpeech() {
 
 function serverMsg(){
     window.speechSynthesis.cancel();
+    if(document.getElementById('display-password').textContent){
     message = 'nothing';
 
     var msg = new SpeechSynthesisUtterance();
@@ -80,6 +81,7 @@ function serverMsg(){
 
     txt = document.getElementById('display-password').textContent;
     sendToServer(txt);
+    }
 }
 
 function RepeatSent(){
