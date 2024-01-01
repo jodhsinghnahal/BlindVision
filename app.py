@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, session, redirect
+import numpy as np
 from ultralytics import YOLO
 import base64
 import io
@@ -12,6 +13,7 @@ from gtts import gTTS
 from flask_session import Session
 import sqlite3
 import string
+import re
 
 letters_a_to_z = list(string.ascii_lowercase)
 
@@ -108,7 +110,7 @@ def image():
     image = Image.open(io.BytesIO(image_bytes))
 
     # Save the image to a file
-    image.save("uploaded_image.jpg")
+    # image.save("uploaded_image.jpg")
 
     # print(2)
 
@@ -145,13 +147,13 @@ def image():
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    img = PIL.Image.open('uploaded_image.jpg')
+    # img = PIL.Image.open('uploaded_image.jpg')
 
     model = genai.GenerativeModel('gemini-pro-vision')
 
     print("hello", text)
     try:
-        response = model.generate_content([text, img], stream=True)
+        response = model.generate_content([text, image], stream=True)
         response.resolve()
         print("done", text)
 
@@ -219,6 +221,175 @@ def hist():
     db.close()        
     
     return render_template("chatHist.html", chat_history=hist)
+
+@app.route("/yolo", methods=['POST', 'GET'])
+def yolo():
+    if request.method == "POST":
+
+        model = YOLO('yolov8n.pt')  # pretrained YOLOv8n model
+        data = request.json
+
+        # Extract the base64-encoded image data
+        image_data = data.get("image", "")
+
+        # Remove the "data:image/jpeg;base64," prefix
+        _, encoded_image = image_data.split(",", 1)
+
+        # Decode the base64-encoded image data
+        image_bytes = base64.b64decode(encoded_image)
+
+        # Convert the image bytes to a PIL Image
+        image = Image.open(io.BytesIO(image_bytes))
+
+        # # Save the image to a file
+        # image.save("uploaded_image.jpg")
+
+        # img = PIL.Image.open('uploaded_image.jpg')
+        # Run batched inference on a list of images
+        #results = model.predict(img)  # return a generator of Results objects
+        # Process results generator
+            # detection
+        # print(result[0].boxes.cls)
+        # print(result[0].boxes.xyxy)
+        # names_ = result[0].names
+
+        # print(type(im))
+        # # <class 'numpy.ndarray'>
+        # print(im.shape)
+        # print(type(im.shape))
+
+        # objs = []
+        
+        # for obj in result[0].boxes.cls:
+        #     ob = str(obj)[7:9]
+        #     if ob[1] == '.':
+        #         ob = ob[0]
+        #     print(names_[int(ob)])
+        #     objs.append(names_[int(ob)])
+        
+        # for obj in result[0].boxes.xywhn:
+        #     print(str(obj))
+        #     ob= str(obj)[8:]
+        #     print(ob)
+        #     ob = ob.split(', ')
+        #     print(ob)
+        #     for o in ob:               
+        #         numsval = re.sub(r'[^0-9.e+\-]', '', o)
+        #         print(numsval)
+        #         print(float(numsval))
+
+        model = YOLO('yolov8n.pt')  # pretrained YOLOv8n model
+
+        im = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+
+        # Run batched inference on a list of images
+        result = model.predict(image)  # return a generator of Results objects
+
+        names_ = result[0].names
+
+        print(type(im))
+        # <class 'numpy.ndarray'>
+        size = im.shape
+        print(type(im.shape))
+
+        x_1 = size[1] / 3
+        y_1 = size[0] / 3
+        x_2 = 2*(size[1] / 3)
+        y_2 = size[0] / 3
+        x_3 = size[1] / 3
+        y_3 = 2*(size[0] / 3)
+        x_4 = 2*(size[1] / 3)
+        y_4 = 2*(size[0] / 3)
+
+        objs = {}
+        objspos = {}
+        relpos = {}
+
+        i= 0
+        for obj in result[0].boxes.cls:
+            ob = str(obj)[7:9]
+            if ob[1] == '.':
+                ob = ob[0]
+            print(names_[int(ob)])
+            objs[i] = (names_[int(ob)])
+            i += 1
+
+        i=0
+        for obj in result[0].boxes.xyxy:
+            print(str(obj))
+            ob= str(obj)[8:]
+            print(ob)
+            ob = ob.split(', ')
+            print(ob)            
+            numsval = re.sub(r'[^0-9.e+\-]', '', ob[0])
+            print(numsval)
+            tlx = float(numsval)
+            numsval = re.sub(r'[^0-9.e+\-]', '', ob[1])
+            print(numsval)
+            tly = float(numsval)
+            numsval = re.sub(r'[^0-9.e+\-]', '', ob[2])
+            print(numsval)
+            brx = float(numsval)
+            numsval = re.sub(r'[^0-9.e+\-]', '', ob[3])
+            print(numsval)
+            bry = float(numsval)
+            centerx = (tlx+brx)/2
+            centery = (tly+bry)/2
+            objspos[i] = (centerx, centery)
+
+            if centerx<x_1 and centery<y_1:
+                print("top left")
+                relpos[objs[i]] = 'top left'
+                print(objs[i])
+                print(objspos[i])
+            elif centerx>x_2 and centery<y_2:
+                print("top right")
+                relpos[objs[i]] = 'top right'
+                print(objs[i])
+                print(objspos[i])
+            elif centerx<x_3 and centery>y_3:
+                print("bottom left")
+                relpos[objs[i]] = 'bottom left'
+                print(objs[i])
+                print(objspos[i])
+            elif centerx > x_4 and centery > y_4:
+                print("bottom right")
+                relpos[objs[i]] = 'bottom right'
+                print(objs[i])
+                print(objspos[i])
+            elif centery < y_1:
+                print("top")
+                relpos[objs[i]] = 'top'
+                print(objs[i])
+                print(objspos[i])
+            elif centery > y_3:
+                print("bottom")
+                relpos[objs[i]] = 'bottom'
+                print(objs[i])
+                print(objspos[i])
+            elif centerx > x_2:
+                print("right")
+                relpos[objs[i]] = 'right'
+                print(objs[i])
+                print(objspos[i])
+            elif centerx < y_1:
+                print("left")
+                relpos[objs[i]] = 'left'
+                print(objs[i])
+                print(objspos[i])
+            else:
+                print("center")
+                relpos[objs[i]] = 'center'
+                print(objs[i])
+                print(objspos[i])
+            i+=1
+
+            print("objects all", str(objs.values())[11:])
+            print("relative position", str(relpos))
+            
+            return jsonify({'objs': str(objs.values())[11:], 'objspos': str(relpos)})
+    
+    return render_template('yolo.html')
 
 if __name__ == "__main__":
     app.run(port=4000, debug=True, threaded=True)
