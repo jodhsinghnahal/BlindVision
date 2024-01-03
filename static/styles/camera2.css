@@ -89,19 +89,19 @@ transform: rotateY(360deg);
   }
   
   #display-password {
-      margin: 0px 0;
-      margin-left: 5px;
-      margin-right: 5px;
-      margin-top: 5px;
-      font-size: 28px;
-      font-weight: bold;
-      flex: 1;
-      overflow: hidden; 
-      white-space: nowrap; 
-      text-overflow: ellipsis;
-background-color: #0800ff;
-width: fit-content;
-color: white;
+    margin: 0px 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 28px;
+    font-weight: bold;
+    flex: 1;
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    background-color: #0800ff;
+    width: fit-content;
+    color: white;
   }
 
 

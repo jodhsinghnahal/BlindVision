@@ -19,7 +19,7 @@ genai.configure(api_key = gemini_api_key)
 
 app = Flask(__name__)
 
-DATABASE = 'logins.db'
+DATABASE = 'database/logins.db'
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -27,8 +27,8 @@ Session(app)
 
 @app.route("/")
 def main():
-    if(not 'username' in session):
-        return redirect('/login')
+    if not session.get("username"):
+        return redirect("/login")
     return render_template("camera2.html")
 
 def connect_db():
@@ -90,14 +90,14 @@ def login():
 
 @app.route('/camerakeyb')
 def camerakeyb():
-    if(not 'username' in session):
-        return redirect('/login')
+    if not session.get("username"):
+        return redirect("/login")
     return render_template("camera.html", letters= letters_a_to_z)
 
 @app.route("/upload_image", methods=["POST"])
 def image():
-    if(not 'username' in session):
-        return redirect('/login')
+    if not session.get("username"):
+        return redirect("/login")
     data = request.json
 
     # Extract the base64-encoded image data
@@ -127,8 +127,8 @@ def image():
 
 @app.route("/chat", methods=['POST', 'GET'])
 def chat():
-    if(not 'username' in session):
-        return redirect('/login')
+    if not session.get("username"):
+        return redirect("/login")
     
     if request.method == 'POST':
         data = request.json
@@ -178,8 +178,8 @@ def chat():
     
 @app.route("/chat2", methods=['POST', 'GET'])
 def chat2():
-    if(not 'username' in session):
-        return redirect('/login')
+    if not session.get("username"):
+        return redirect("/login")
     
     if request.method == 'POST':
         data = request.json
@@ -229,8 +229,8 @@ def chat2():
     
 @app.route("/hist")
 def hist():
-    if(not 'username' in session):
-        return redirect('/login')
+    if not session.get("username"):
+        return redirect("/login")
     
     db = connect_db()
     cursor = db.cursor()
@@ -242,12 +242,12 @@ def hist():
 
 @app.route("/yolo", methods=['POST', 'GET'])
 def yolo():
-    if(not 'username' in session):
+    if(not session["username"]):
         return redirect('/login')
     
     if request.method == "POST":
 
-        model = YOLO('yolov8n.pt')  # pretrained YOLOv8n model
+        model = YOLO('other/yolov8n.pt')  # pretrained YOLOv8n model
         data = request.json
 
         # Extract the base64-encoded image data
@@ -261,8 +261,6 @@ def yolo():
 
         # Convert the image bytes to a PIL Image
         image = Image.open(io.BytesIO(image_bytes))
-
-        model = YOLO('yolov8n.pt')  # pretrained YOLOv8n model
 
         im = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
