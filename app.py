@@ -5,16 +5,12 @@ import base64
 import io
 from PIL import Image
 import cv2
-import torch
 import google.generativeai as genai
 import os
-import PIL.Image
-from gtts import gTTS
 from flask_session import Session
 import sqlite3
 import string
 import re
-import pytesseract
 
 
 letters_a_to_z = list(string.ascii_lowercase)
@@ -32,10 +28,9 @@ Session(app)
 
 @app.route("/")
 def main():
-    print(session.get("username"))
     if not session.get("username"):
         return redirect("/login")
-    return render_template("camera2.html", letters= letters_a_to_z)
+    return render_template("camera2.html")
 
 def connect_db():
     return sqlite3.connect(DATABASE)
@@ -93,6 +88,10 @@ def login():
         session["username"] = request.form.get("username")
         return redirect("/")
     return render_template("login.html", letters=letters_a_to_z)
+
+@app.route('/camerakeyb')
+def camerakeyb():
+    return render_template("camera.html", letters= letters_a_to_z)
 
 @app.route("/upload_image", methods=["POST"])
 def image():
@@ -210,6 +209,54 @@ def chat():
 
     else:
         return render_template("chat.html", letters=letters_a_to_z)
+    
+@app.route("/chat2", methods=['POST', 'GET'])
+def chat2():
+    if request.method == 'POST':
+        data = request.json
+
+        model = genai.GenerativeModel('gemini-pro')
+
+        db = connect_db()
+        cursor = db.cursor()
+        #parts = model message, role=user messsage
+        hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC LIMIT 10", (session["username"],)).fetchall()
+        db.close()
+        print(hist)
+        # history = [{'parts': [parts], 'role': role} for parts, role in hist]
+        history_=[]
+        for mes in hist:
+            print(mes[1])
+            print(mes[0])
+            history_.append({'parts': mes[1], 'role': 'user'})
+            history_.append({'parts': mes[0], 'role': 'model'}) 
+        # Start the chat with the updated history
+        
+        try:
+            aichat = model.start_chat(history=history_)
+
+            response = aichat.send_message(data.get("text"))
+
+            # for mes in aichat.history:
+            #     print(mes)
+            # print(aichat.history)
+
+            db = connect_db()
+            cursor = db.cursor()
+            parts = response.text;
+            role = data.get("text")
+            print(parts)
+            print(role)
+            cursor.execute("INSERT INTO user_data (user_id, parts, role) VALUES ((SELECT id from users where username = ?), ?, ?)", (session["username"],parts, role))
+            db.commit()
+            db.close()
+
+            return jsonify({'message': response.text})
+        except:
+            return jsonify({'message': 'error'})
+
+    else:
+        return render_template("chat2.html")
     
 @app.route("/hist")
 def hist():

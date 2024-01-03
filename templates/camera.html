@@ -196,7 +196,9 @@
 
   <body>
     
-    <form action="/chat">
+    <form action="/" id = 'form2'>
+    </form>
+    <form action="/chat2" id = 'form1'>
     </form>
     <canvas id="canvas" width="400" height="300" hidden></canvas>
 
@@ -207,7 +209,7 @@
       <div id="password-container">
 
       {% for letter in letters %}
-      <div class="password-btn" id = {{letter}}>{{ letter }}</div>
+      <button class="password-btn" id = {{letter}}>{{ letter }}</button>
       {% endfor %}
   
       <button class="password-btn" id="123">123</button>
@@ -381,7 +383,7 @@
             });
 
             function handleSwipe() {
-                let minSwipeDistance = 50;
+                let minSwipeDistance = 100;
                 let swipeDistance = touchendX - touchstartX;
 
                 //right swipe

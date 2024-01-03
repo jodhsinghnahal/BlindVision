@@ -20,7 +20,7 @@ function talk() {
 
 function sendToServer(text) {
     // Use HTTP POST to send image and text to the server
-    fetch('/chat', {
+    fetch('/chat2', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -136,10 +136,11 @@ document.addEventListener('click', () => {
 
 
 document.addEventListener('dblclick', () => {
-    window.speechSynthesis.cancel();
-    var msg = new SpeechSynthesisUtterance();
-    msg.text = "draw";
-    window.speechSynthesis.speak(msg);
-    
-    document.getElementById('form2').submit();
-    });
+window.speechSynthesis.cancel();
+var msg = new SpeechSynthesisUtterance();
+msg.text = "keyboard";
+window.speechSynthesis.speak(msg);
+
+document.getElementById('form2').submit();
+});
+        

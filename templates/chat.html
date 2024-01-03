@@ -182,9 +182,11 @@
   </head>
 
   <body>
-    
-    <form action="/hist">
+    <form action="/chat2" id = 'form2'>
     </form>
+    <form action="/hist" id = 'form1'>
+    </form>
+
     <canvas id="canvas" width="400" height="300" hidden></canvas>
 
     <form action="/logout" hidden>
@@ -332,7 +334,7 @@
             });
 
             function handleSwipe() {
-                let minSwipeDistance = 50;
+                let minSwipeDistance = 100;
                 let swipeDistance = touchendX - touchstartX;
 
                 //right swipe

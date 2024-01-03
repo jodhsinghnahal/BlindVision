@@ -122,19 +122,50 @@ function RepeatSent(){
     }
     else{
         var msg = new SpeechSynthesisUtterance();
-        msg.text = the_mes;
+        msg.text = the_mes.toLowerCase();  
+        console.log(msg.text);
         window.speechSynthesis.speak(msg);
     }
 }
 
-document.addEventListener('dblclick', () => {
-    window.speechSynthesis.cancel();
+let clickCount = 0;
+let lastClickTime = 0;
 
-    var msg = new SpeechSynthesisUtterance();
-    msg.text = 'Window Switched';
-    window.speechSynthesis.speak(msg);
+document.addEventListener('click', () => {
+  const now = new Date().getTime();
+  const timeSinceLastClick = now - lastClickTime;
 
-    document.querySelector('form').submit();
+  if (timeSinceLastClick < 600) {  // Adjust the time frame (in milliseconds) as needed
+    clickCount++;
 
+    if (clickCount === 3) {
+      // Perform your desired actions on triple click
+    //   window.speechSynthesis.cancel();
+      
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = 'Chat';
+      window.speechSynthesis.speak(msg);
+
+      document.getElementById('form1').submit();
+
+      // Reset click count and time
+      clickCount = 0;
+    }
+  } else {
+    // Reset click count if there was a gap between clicks
+    clickCount = 1;
+  }
+
+  // Update the last click time
+  lastClickTime = now;
 });
 
+
+document.addEventListener('dblclick', () => {
+    // window.speechSynthesis.cancel();
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = "keyboard";
+    window.speechSynthesis.speak(msg);
+    
+    document.getElementById('form2').submit();
+    });
