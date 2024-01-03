@@ -110,7 +110,7 @@ document.addEventListener('dblclick', () => {
     window.speechSynthesis.cancel();
 
     var msg = new SpeechSynthesisUtterance();
-    msg.text = 'Window Switched';
+    msg.text = 'Image chat mode';
     window.speechSynthesis.speak(msg);
 
     document.querySelector('form').submit();

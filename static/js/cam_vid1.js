@@ -135,12 +135,11 @@ document.addEventListener('click', () => {
   const now = new Date().getTime();
   const timeSinceLastClick = now - lastClickTime;
 
-  if (timeSinceLastClick < 600) {  // Adjust the time frame (in milliseconds) as needed
+  if (timeSinceLastClick < 600) {
     clickCount++;
 
     if (clickCount === 3) {
-      // Perform your desired actions on triple click
-    //   window.speechSynthesis.cancel();
+      window.speechSynthesis.cancel();
       
       const msg = new SpeechSynthesisUtterance();
       msg.text = 'Chat Mode';
@@ -162,10 +161,10 @@ document.addEventListener('click', () => {
 
 
 document.addEventListener('dblclick', () => {
-    // window.speechSynthesis.cancel();
+     window.speechSynthesis.cancel();
     var msg = new SpeechSynthesisUtterance();
     msg.text = "draw";
     window.speechSynthesis.speak(msg);
     
-    document.getElementById('form2').submit();
+    setTimeout(() => {document.getElementById('form2').submit();}, 1000);
     });

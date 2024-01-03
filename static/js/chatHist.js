@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.addEventListener('keydown', function (event) {
-        if (event.keyCode === 39) {
+        if (event.keyCode === 37) {
             stopSpeaking();
         }
     });
@@ -58,7 +58,7 @@ document.addEventListener('dblclick', () => {
     window.speechSynthesis.cancel();
 
     var msg = new SpeechSynthesisUtterance();
-    msg.text = 'Window Switched';
+    msg.text = 'Real time mode';
     window.speechSynthesis.speak(msg);
 
     document.querySelector('form').submit();
