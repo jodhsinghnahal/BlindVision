@@ -142,4 +142,4 @@ document.addEventListener('dblclick', () => {
     window.speechSynthesis.speak(msg);
     
     document.getElementById('form2').submit();
-    });
+});

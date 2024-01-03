@@ -1,0 +1,183 @@
+body {
+   background-color: #0022ff;
+   margin: 0; 
+   overflow: hidden;
+ }
+
+ #videoContainer {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   z-index: -1; 
+ }
+
+ #videoElement {
+   width: 100%;
+   height: 100%;
+   object-fit: cover; 
+ }
+
+@media only screen and (min-width: 1000px) {
+/* Apply the rotation only on larger screens (adjust the breakpoint as needed) */
+#videoElement {
+ transform: rotateY(360deg);
+ -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+ -moz-transform: rotateY(180deg); /* Firefox */
+}
+}
+
+ #canvas {
+   width: 100%;
+   height: 100%; 
+ }
+
+   #password-container {
+       display: grid;
+       grid-template-columns: repeat(3, 1fr);
+       gap: 1px;;
+       padding: 0;
+       flex: 1;
+       margin-top: 20px;
+        margin-bottom: 1px;
+     height: 62vh;
+     width: 100vw;
+   }
+
+   .password-btn {
+       font-size: 28px;
+       cursor: pointer;
+       transition: background-color 0.3s;
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       background-color: transparent;
+   }
+
+   .password-btn:hover {
+       background-color: #e0e0e0;
+   }
+
+   #display-password {
+       margin: 20px 0;
+       font-size: 28px;
+       font-weight: bold;
+       flex: 1;
+   }
+
+   #controlconatainer{
+     margin: 0 auto;
+     justify-content: center;
+   }
+
+   .control-btn {
+       padding: 16px;
+       font-size: 18px;
+       cursor: pointer;
+       transition: background-color 0.3s;
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       background-color: transparent;
+       color: #fff;
+       height: 8vh;
+       width: 32vw;
+       margin: 1px;
+   }
+
+   .control-btn:hover {
+       background-color: #4fa3d1;
+   }
+ 
+ #display-password {
+    margin: 0px 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 28px;
+    font-weight: bold;
+    flex: 1;
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+ background-color: #0800ff;
+ width: fit-content;
+ color: white;
+ }
+
+
+#speech::before {
+content: "";
+display: inline-block;
+width: 20px;
+height: 80%;
+background-image: url("../images/mic.png");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+#talk::before {
+content: "";
+display: inline-block;
+width: 20px;
+height: 80%;
+background-image: url("../images/talk.png");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+#send::before {
+content: "";
+display: inline-block;
+width: 20px;
+height: 80%;
+background-image:url("../images/send.png");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+#clear::before {
+content: "";
+display: inline-block;
+width: 20px;
+height: 80%;
+background-image: url("../images/clear.svg");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+#back::before {
+content: "";
+display: inline-block;
+width: 20px;
+height: 80%;
+background-image: url("../images/back.png");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+#repeat::before {
+content: "";
+display: inline-block;
+width: 20px;
+height: 80%;
+background-image: url("../images/repeat.png");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+}
+
+#space{
+width: 100vw;
+height: 7.5vh;
+font-size: 20px;
+background-color: transparent;
+}
+
+#space:hover {
+       background-color: #4fa3d1;
+   }

@@ -352,7 +352,7 @@ def yolo():
 
         objs = {}
         objspos = {}
-        relpos = {}
+        relpos = []
 
         i= 0
         for obj in result[0].boxes.cls:
@@ -385,58 +385,60 @@ def yolo():
             centerx = (tlx+brx)/2
             centery = (tly+bry)/2
             objspos[i] = (centerx, centery)
+            print(objspos[i])
 
             if centerx<x_1 and centery<y_1:
                 print("top left")
-                relpos[objs[i]] = 'top left'
+                relpos.append((objs[i], "top left"))
                 print(objs[i])
                 print(objspos[i])
             elif centerx>x_2 and centery<y_2:
                 print("top right")
-                relpos[objs[i]] = 'top right'
+                relpos.append((objs[i], "top right"))
                 print(objs[i])
                 print(objspos[i])
             elif centerx<x_3 and centery>y_3:
                 print("bottom left")
-                relpos[objs[i]] = 'bottom left'
+                relpos.append((objs[i], "bottom left"))
                 print(objs[i])
                 print(objspos[i])
             elif centerx > x_4 and centery > y_4:
                 print("bottom right")
-                relpos[objs[i]] = 'bottom right'
+                relpos.append((objs[i], "bottom right"))
                 print(objs[i])
                 print(objspos[i])
             elif centery < y_1:
                 print("top")
-                relpos[objs[i]] = 'top'
+                relpos.append((objs[i], "top"))
                 print(objs[i])
                 print(objspos[i])
             elif centery > y_3:
                 print("bottom")
-                relpos[objs[i]] = 'bottom'
+                relpos.append((objs[i], "bottom"))
                 print(objs[i])
                 print(objspos[i])
             elif centerx > x_2:
                 print("right")
-                relpos[objs[i]] = 'right'
+                relpos.append((objs[i], "right"))
                 print(objs[i])
                 print(objspos[i])
             elif centerx < y_1:
                 print("left")
-                relpos[objs[i]] = 'left'
+                relpos.append((objs[i], "left"))
                 print(objs[i])
                 print(objspos[i])
             else:
                 print("center")
-                relpos[objs[i]] = 'center'
+                relpos.append((objs[i], "center"))
                 print(objs[i])
                 print(objspos[i])
             i+=1
-
-            print("objects all", str(objs.values())[11:])
-            print("relative position", str(relpos))
             
-            return jsonify({'objs': str(objs.values())[11:], 'objspos': str(relpos)})
+        print(str(objs.values())[11:])
+        print(str(relpos))
+        if(str(objs.values())[11:] == '([])'):
+            return jsonify({'objs': '', 'objspos': ''})
+        return jsonify({'objs': str(objs.values())[11:], 'objspos': str(relpos)})
     
     return render_template('yolo.html')
 
