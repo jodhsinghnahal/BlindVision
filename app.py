@@ -12,7 +12,6 @@ import sqlite3
 import string
 import re
 
-
 letters_a_to_z = list(string.ascii_lowercase)
 
 gemini_api_key = os.environ["GOOGLE_API_KEY"]
@@ -28,8 +27,8 @@ Session(app)
 
 @app.route("/")
 def main():
-    if not session.get("username"):
-        return redirect("/login")
+    if(not 'username' in session):
+        return redirect('/login')
     return render_template("camera2.html")
 
 def connect_db():
@@ -91,10 +90,14 @@ def login():
 
 @app.route('/camerakeyb')
 def camerakeyb():
+    if(not 'username' in session):
+        return redirect('/login')
     return render_template("camera.html", letters= letters_a_to_z)
 
 @app.route("/upload_image", methods=["POST"])
 def image():
+    if(not 'username' in session):
+        return redirect('/login')
     data = request.json
 
     # Extract the base64-encoded image data
@@ -110,46 +113,6 @@ def image():
     # Convert the image bytes to a PIL Image
     image = Image.open(io.BytesIO(image_bytes))
 
-    # Save the image to a file
-    # image.save("uploaded_image.jpg")
-
-    # print(2)
-
-    # # Load YOLOv7 model
-    # # model = torch.hub.load('/yolov7.pt', 'yolov7')
-    # # model = YOLO("yolov7/models/yolo.py")
-    # model = YOLO("yolov7m.pt")
-
-    # print(3)
-
-    # # Load the saved image
-    # image = cv2.imread('uploaded_image.jpg')
-
-    # print(4)
-
-    # # Perform object detection
-    # results = model(image)
-
-    # print(5)
-
-    # # Process detection results
-    # detected_objects = results.pred[0]  # Extract detected objects
-    # for obj in detected_objects:
-    #     print(6)
-    #     label = obj.get_field('names')[0]  # Get label
-    #     confidence = obj.get_field('scores')[0]  # Get confidence score
-    #     box = obj.bbox.int().tolist()  # Get bounding box coordinates
-    #     cv2.rectangle(image, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
-    #     cv2.putText(image, f'{label}: {confidence:.2f}', (box[0], box[1] - 10),
-    #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-    # # Display the result
-    # cv2.imshow('Object Detection', image)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
-    # img = PIL.Image.open('uploaded_image.jpg')
-
     model = genai.GenerativeModel('gemini-pro-vision')
 
     print("hello", text)
@@ -164,6 +127,9 @@ def image():
 
 @app.route("/chat", methods=['POST', 'GET'])
 def chat():
+    if(not 'username' in session):
+        return redirect('/login')
+    
     if request.method == 'POST':
         data = request.json
 
@@ -212,6 +178,9 @@ def chat():
     
 @app.route("/chat2", methods=['POST', 'GET'])
 def chat2():
+    if(not 'username' in session):
+        return redirect('/login')
+    
     if request.method == 'POST':
         data = request.json
 
@@ -261,7 +230,7 @@ def chat2():
 @app.route("/hist")
 def hist():
     if(not 'username' in session):
-        return redirect('/')
+        return redirect('/login')
     
     db = connect_db()
     cursor = db.cursor()
@@ -273,6 +242,9 @@ def hist():
 
 @app.route("/yolo", methods=['POST', 'GET'])
 def yolo():
+    if(not 'username' in session):
+        return redirect('/login')
+    
     if request.method == "POST":
 
         model = YOLO('yolov8n.pt')  # pretrained YOLOv8n model
@@ -290,56 +262,15 @@ def yolo():
         # Convert the image bytes to a PIL Image
         image = Image.open(io.BytesIO(image_bytes))
 
-        # # Save the image to a file
-        # image.save("uploaded_image.jpg")
-
-        # img = PIL.Image.open('uploaded_image.jpg')
-        # Run batched inference on a list of images
-        #results = model.predict(img)  # return a generator of Results objects
-        # Process results generator
-            # detection
-        # print(result[0].boxes.cls)
-        # print(result[0].boxes.xyxy)
-        # names_ = result[0].names
-
-        # print(type(im))
-        # # <class 'numpy.ndarray'>
-        # print(im.shape)
-        # print(type(im.shape))
-
-        # objs = []
-        
-        # for obj in result[0].boxes.cls:
-        #     ob = str(obj)[7:9]
-        #     if ob[1] == '.':
-        #         ob = ob[0]
-        #     print(names_[int(ob)])
-        #     objs.append(names_[int(ob)])
-        
-        # for obj in result[0].boxes.xywhn:
-        #     print(str(obj))
-        #     ob= str(obj)[8:]
-        #     print(ob)
-        #     ob = ob.split(', ')
-        #     print(ob)
-        #     for o in ob:               
-        #         numsval = re.sub(r'[^0-9.e+\-]', '', o)
-        #         print(numsval)
-        #         print(float(numsval))
-
         model = YOLO('yolov8n.pt')  # pretrained YOLOv8n model
 
         im = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
-        # Run batched inference on a list of images
-        result = model.predict(image)  # return a generator of Results objects
+        result = model.predict(image) 
 
         names_ = result[0].names
 
-        print(type(im))
-        # <class 'numpy.ndarray'>
         size = im.shape
-        print(type(im.shape))
 
         x_1 = size[1] / 3
         y_1 = size[0] / 3
