@@ -373,4 +373,4 @@ def yolo():
     return render_template('yolo.html')
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True, port=4000, threaded=True)

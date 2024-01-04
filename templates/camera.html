@@ -9,7 +9,6 @@
   </head>
 
   <body>
-    
     <form action="/" id = 'form2'>
     </form>
     <form action="/chat2" id = 'form1'>
@@ -29,6 +28,7 @@
       <button class="password-btn" id="123">123</button>
       </div>
 
+      <div id="bottomQuarter">
       <button id="space" onclick="space()">space</button>
 
         <div id="controlconatainer">
@@ -48,6 +48,7 @@
       <div id="videoContainer">
           <video autoplay playsinline id="videoElement"></video>
       </div>
+    </div>
 
     <script src="{{ url_for('static',filename='js/cam_input1.js') }}"></script>
     <script src="{{ url_for('static',filename='js/cam_vid1.js') }}"></script>

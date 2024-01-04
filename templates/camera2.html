@@ -35,6 +35,7 @@
 
     <canvas style="border:1px solid grey;" id='c2' class="" hidden></canvas>
 
+    <div id="bottomQuarter">
       <button id="space" onclick="space()">space</button>
 
         <div id="controlconatainer">
@@ -54,7 +55,7 @@
       <div id="videoContainer">
           <video autoplay playsinline id="videoElement"></video>
       </div>
-
+    </div>
     <script src="{{ url_for('static',filename='js/cam_ocr.js') }}"></script>
     <script src="{{ url_for('static',filename='js/cam_input2.js') }}"></script>
     <script src="{{ url_for('static',filename='js/cam_vid2.js') }}"></script>

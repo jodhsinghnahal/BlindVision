@@ -105,7 +105,8 @@ function RepeatSent(){
 let clickCount = 0;
 let lastClickTime = 0;
 
-document.addEventListener('click', () => {
+document.getElementById('bottomQuarter').addEventListener('click', (event) => {
+    if(!(event.target.id === 'back')){
   const now = new Date().getTime();
   const timeSinceLastClick = now - lastClickTime;
 
@@ -132,14 +133,17 @@ document.addEventListener('click', () => {
 
   // Update the last click time
   lastClickTime = now;
+}
 });
 
 
-document.addEventListener('dblclick', () => {
+document.getElementById('bottomQuarter').addEventListener('dblclick', (event) => {
+    if(!(event.target.id === 'back')){
     window.speechSynthesis.cancel();
     var msg = new SpeechSynthesisUtterance();
     msg.text = "draw";
     window.speechSynthesis.speak(msg);
     
     setTimeout(() => {document.getElementById('form2').submit();}, 1000);
+    }
 });

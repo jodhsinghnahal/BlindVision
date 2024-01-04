@@ -184,3 +184,10 @@ background-color: transparent;
       background-color: #4fa3d1;
   }
 
+  #bottomQuarter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 25%;
+}
