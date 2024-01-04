@@ -33,11 +33,14 @@
     </div>
 
     <div id="controlconatainer">
-        <button class="control-btn" onclick="deleteLastCharacter()" id="back" hidden></button>
-        <button class="control-btn" onclick="clearPassword()" id = "clear" hidden></button>
-        {% if right %}
+        <button class="control-btn" onclick="deleteLastCharacter()" id="back"></button>
+        <button class="control-btn" onclick="clearPassword()" id = "clear"></button>
+        <button class="control-btn" onclick="right()" id = "right" style="color: black;">
+        {% if not right %}
+            Enter
+        {% endif %}
         {{right}}
-     {% endif %}
+    </button>
     </div>
 
     <script src="{{ url_for('static',filename='js/login.js') }}"></script>

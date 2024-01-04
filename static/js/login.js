@@ -173,3 +173,10 @@ function startSpeechRecognition() {
         user1.value = '';
       }
   }
+  
+function right(){
+    window.speechSynthesis.cancel();
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = document.getElementById('right').textContent;
+    window.speechSynthesis.speak(msg);
+}
