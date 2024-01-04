@@ -75,6 +75,7 @@ Draw characters on the canvas using mouse or tap, text you write will be automat
 
 
 **SWIPE EVENTS WORK ONLY BELOW CANVAS IN DRAW MODE**
+
 **Swipe-down/up-arrow-key** to do speech recognition (recommended to use Keyboard mode for better accuracy), text will be added once speech recognition ends.
 
 
