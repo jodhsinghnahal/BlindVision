@@ -1,1 +1,3 @@
 static/js/ocrad.js
+__pycache__/
+flask_session/
