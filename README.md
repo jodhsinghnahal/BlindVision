@@ -109,6 +109,3 @@ Click the top button to speak the objects, the bottom button to speak objects an
 
 
 ## Getting started
-
-
-
