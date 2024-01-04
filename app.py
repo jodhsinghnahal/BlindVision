@@ -14,7 +14,7 @@ import re
 
 letters_a_to_z = list(string.ascii_lowercase)
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyCo9spIoq3yjvQR0U-QWtaTXD8PbJtmEJA"
+os.environ["GOOGLE_API_KEY"] = "AIzaSyCo9spIoq3yjvQR0U-XXXXXXXXXXXXX"
 gemini_api_key = os.environ["GOOGLE_API_KEY"]
 genai.configure(api_key = gemini_api_key)
 

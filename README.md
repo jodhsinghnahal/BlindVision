@@ -1,6 +1,6 @@
 # BlindVision
 
-[website](https://jodh.pythonanywhere.com/)
+[BlindVision](https://jodh.pythonanywhere.com/)
 
 BlindVision is a user-friendly web application designed for the visually impaired, that helps blind people to see and describe the world around them.
 
@@ -29,11 +29,10 @@ Check objects in the frame and relative position, fast response time.
 ## Usage
 
 
-**Triple tap** to switch between modes (can do double tap to switch modes when in Chat History Mode/Real Time Mode)
+**Triple tap** (anywhere below the canvas/keyboard except delete button) to switch between modes (can do double tap to switch modes when in Chat History Mode/Real Time Mode)
 
 
-**Double tap** to switch between keyboard and drawing (For Image Chat Mode and Chat Mode)
-Triple/Double tap off the canvas when in drawing mode
+**Double tap** (anywhere below the canvas/keyboard except delete button) to switch between keyboard and drawing (For Image Chat Mode and Chat Mode)
 
 
 **Desktop:** uses webcam. **Mobile:** uses rear-facing camera
@@ -108,5 +107,3 @@ Same usage as **Image Chat Mode**.
 ### Real Time Mode ###
 Click the top button to speak the objects, the bottom button to speak objects and their relative position.
 
-
-## Getting started
