@@ -25,12 +25,12 @@ function clearPassword() {
     displayPassword.textContent = '';
 }
 
-  document.addEventListener('touchstart', function (event) {
+document.getElementById('bottomQuarter').addEventListener('touchstart', function (event) {
       touchstartX = event.touches[0].clientX;
       touchstartY = event.touches[0].clientY;
   });
 
-  document.addEventListener('touchend', function (event) {
+document.getElementById('bottomQuarter').addEventListener('touchend', function (event) {
       touchendX = event.changedTouches[0].clientX;
       touchendY = event.changedTouches[0].clientY;
        handleSwipe();
@@ -65,7 +65,7 @@ function clearPassword() {
   });
 
   function handleSwipe() {
-      let minSwipeDistance = 0.7 * window.innerWidth;
+      let minSwipeDistance = 100;
       let swipeDistance = touchendX - touchstartX;
 
       //right swipe
@@ -76,7 +76,7 @@ function clearPassword() {
           document.getElementById('send').click();
       }
 
-      let minSwipeDistance2 = 0.7 * window.innerHeight;
+      let minSwipeDistance2 = 50;
       let swipeDistance2 = touchendY - touchstartY;
 
       if (swipeDistance2 > minSwipeDistance2) {

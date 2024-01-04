@@ -74,20 +74,21 @@ Draw characters on the canvas using mouse or tap, text you write will be automat
 **Quickly tap/click** and release again if you want to add the cleared text.
 
 
-**Long-swipe-down/up-arrow-key** to do speech recognition (recommended to use Keyboard mode for better accuracy), text will be added once speech recognition ends.
+**SWIPE EVENTS WORK ONLY BELOW CANVAS IN DRAW MODE**
+**Swipe-down/up-arrow-key** to do speech recognition (recommended to use Keyboard mode for better accuracy), text will be added once speech recognition ends.
 
 
-**Long-swipe-up/down-arrow-key** to speak the entered text.
+**Swipe-up/down-arrow-key** to speak the entered text.
 
 
-**Long-swipe-right/left-arrow-key** to speak the received response from the model.
+**Swipe-right/left-arrow-key** to speak the received response from the model.
 
 
-**Long-swipe-left/right-arrow-key** to send the message (image and entered text) to the model.
+**Swipe-left/right-arrow-key** to send the message (image and entered text) to the model.
 
 
 **Keyboard mode:**
-Same as above, except **short instead of long swipes** and click keys on the keyboard to add them.
+Same as above, except swipe works anywhere, click keys on the keyboard to add them.
 
 
 Also click 123 to enter other characters as well. The characters are spoken as you click them.
@@ -106,4 +107,3 @@ Same usage as **Image Chat Mode**.
 
 ### Real Time Mode ###
 Click the top button to speak the objects, the bottom button to speak objects and their relative position.
-

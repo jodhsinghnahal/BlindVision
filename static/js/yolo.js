@@ -100,6 +100,8 @@ setInterval(() => {
         message2 = data['objspos'];
         console.log(message);
         console.log(message2);
+        input2.textContent = message2;
+        input.textContent = message;
     })
     .catch(error => {
         console.error('Error sending image:', error);
