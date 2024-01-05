@@ -29,7 +29,7 @@ Check objects in the frame and relative position, fast response time.
 ## Usage
 
 
-**Triple tap** (anywhere below the canvas/keyboard except delete button) to switch between modes (can do double tap to switch modes when in Chat History Mode/Real Time Mode)
+**Triple tap** (anywhere below the canvas/keyboard except delete button) to switch between modes (can do double tap to switch modes when in Chat History Mode/Real Time Mode) (can also triple click arrow keys to switch modes when in Image Chat Mode/Chat Mode)
 
 
 **Double tap** (anywhere below the canvas/keyboard except delete button) to switch between keyboard and drawing (For Image Chat Mode and Chat Mode)

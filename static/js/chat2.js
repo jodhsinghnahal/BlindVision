@@ -84,6 +84,11 @@ function serverMsg(){
     txt = document.getElementById('display-password').textContent;
     sendToServer(txt);
     }
+    else{
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = 'nothing to send';
+        window.speechSynthesis.speak(msg);
+    }
 }
 
 function RepeatSent(){
