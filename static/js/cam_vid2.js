@@ -143,7 +143,7 @@ document.getElementById('bottomQuarter').addEventListener('click', (event) => {
       window.speechSynthesis.cancel();
       
       const msg = new SpeechSynthesisUtterance();
-      msg.text = 'Chat';
+      msg.text = 'Chat Mode';
       window.speechSynthesis.speak(msg);
 
       document.getElementById('form1').submit();

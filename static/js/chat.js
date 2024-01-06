@@ -40,6 +40,12 @@ function sendToServer(text) {
 function GetSpeech() {
     window.speechSynthesis.cancel();
 
+    //desktop only
+    // window.speechSynthesis.cancel();
+    // var msg = new SpeechSynthesisUtterance();
+    // msg.text = 'start';
+    // window.speechSynthesis.speak(msg);
+
      console.log("clicked microphone");
 
     const SpeechRecognition =  window.SpeechRecognition || window.webkitSpeechRecognition;

@@ -32,16 +32,18 @@
         <button class="password-btn" id="123">123</button>
     </div>
 
+<div id="centered">
     <div id="controlconatainer">
         <button class="control-btn" onclick="deleteLastCharacter()" id="back"></button>
         <button class="control-btn" onclick="clearPassword()" id = "clear"></button>
         <button class="control-btn" onclick="right()" id = "right" style="color: black;">
         {% if not right %}
-            Enter
+            Result
         {% endif %}
         {{right}}
     </button>
     </div>
+</div>
 
     <script src="{{ url_for('static',filename='js/login.js') }}"></script>
 

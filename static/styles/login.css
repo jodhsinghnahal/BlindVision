@@ -185,3 +185,9 @@ display: flex;
 margin: 0 auto;
 justify-content: center;
 }
+
+
+#centered{
+    display: flex;
+    align-items: center;
+}

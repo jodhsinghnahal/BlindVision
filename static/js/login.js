@@ -68,6 +68,10 @@ function startSpeechRecognition() {
                     const result = event.results[event.resultIndex][0].transcript;
                     console.log(result);
                     if(result.toLowerCase().includes('password')){
+                        window.speechSynthesis.cancel();
+                        var msg = new SpeechSynthesisUtterance();
+                        msg.text = 'enter password';
+                        window.speechSynthesis.speak(msg);
                         password=true;
                     }
                     if(result.toLowerCase().includes('signup') || result.toLowerCase().includes('sign up')){
@@ -79,7 +83,6 @@ function startSpeechRecognition() {
                         document.getElementById('loginform').submit();
                         password=false;
                     }
-
                     console.log('Speech result:', result);
                 };
 
