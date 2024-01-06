@@ -1,6 +1,6 @@
 # BlindVision
 
-[BlindVision](https://jodh.pythonanywhere.com/)
+Vist [BlindVision](https://jodh.pythonanywhere.com/). Read Usage below for how to use the app. Recommended to always allow camera and microphone for better usage. 
 
 BlindVision is a user-friendly web application designed for the visually impaired, that helps blind people to see and describe the world around them.
 
@@ -35,7 +35,7 @@ Check objects in the frame and relative position, fast response time.
 **Double tap** (anywhere below the canvas/keyboard except delete button) to switch between keyboard and drawing (For Image Chat Mode and Chat Mode)
 
 
-**Desktop:** uses webcam. **Mobile:** uses rear-facing camera
+**Desktop:** uses webcam. **Mobile:** uses rear-facing camera. On mobile must click on any button or canvas on the screen after switching modes to allow for speech.
 
 
 ### Login ###
