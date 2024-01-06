@@ -2,10 +2,10 @@
 
 Vist [BlindVision](https://jodh.pythonanywhere.com/). Read Usage below for how to use the app. Recommended to always allow camera and microphone for better usage. 
 
-BlindVision is a user-friendly web application designed for the visually impaired, that helps blind people to see and describe the world around them.
+BlindVision is a user-friendly web application designed for the visually impaired, that helps blind people to see and describe the world around them through.
 
 
-The app uses a combination of computer vision and artificial intelligence to identify objects and obstacles in the user's environment. BlindVision can then use this information to provide the user with a description of their surroundings.
+The app uses a combination of computer vision and artificial intelligence to identify objects and obstacles in the user's environment. BlindVision can then use this information to provide the user with a description of their surroundings through speech.
 
 
 ## Features
