@@ -2,7 +2,7 @@
 
 Vist [BlindVision](https://jodh.pythonanywhere.com/). Read Usage below for how to use the app. Recommended to always allow camera and microphone for better usage. 
 
-BlindVision is a user-friendly web application designed for the visually impaired, that helps blind people to see and describe the world around them through.
+BlindVision is a user-friendly web application designed for the visually impaired, that helps blind people to see and describe the world around them.
 
 
 The app uses a combination of computer vision and artificial intelligence to identify objects and obstacles in the user's environment. BlindVision can then use this information to provide the user with a description of their surroundings through speech.
@@ -35,7 +35,7 @@ Check objects in the frame and relative position, fast response time.
 **Double tap** (anywhere below the canvas/keyboard except delete button) to switch between keyboard and drawing (For Image Chat Mode and Chat Mode)
 
 
-**Desktop:** uses webcam. **Mobile:** uses rear-facing camera. On mobile must click on any button or canvas on the screen after switching modes to allow for speech.
+**Desktop:** uses webcam. **Mobile:** uses rear-facing camera. On mobile you must click on any button or canvas on the screen after switching modes to allow for speech.
 
 
 ### Login ###
@@ -107,4 +107,4 @@ Same usage as **Image Chat Mode**.
 
 
 ### Real Time Mode ###
-Click the top button to speak the objects, the bottom button to speak objects and their relative position.
+Click the top button to speak the objects, the bottom button to speak objects and their relative position. Also using the Arduino, you can use the noise level to know the approximate distance to the object (louder means closer).
