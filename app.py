@@ -40,6 +40,12 @@ def logout():
     session["username"] = None
     return redirect("/")
 
+@app.route('/how')
+def how():
+    if not session.get("username"):
+        return redirect("/login")
+    return render_template("how.html")
+
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
     db = connect_db()

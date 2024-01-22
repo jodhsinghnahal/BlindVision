@@ -189,3 +189,20 @@ background-color: transparent;
     justify-content: flex-end;
     height: 25%;
 }
+
+#top-right-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4fa3d1;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#top-right-button:hover {
+  background-color: #2c688e;
+}
