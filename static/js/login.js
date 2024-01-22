@@ -101,6 +101,14 @@ function startSpeechRecognition() {
             var pass1 = document.getElementById('pass1');
             var password=false;
   
+            user.addEventListener('click', function(){
+                password = false;
+            });
+
+            pass.addEventListener('click', function(){
+                password = true;
+            });
+
   document.getElementById('password-container').addEventListener('click', function (event) {
       if (event.target.classList.contains('password-btn')) {
         var clickedButton = event.target.textContent;
