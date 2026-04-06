@@ -39,7 +39,7 @@ def webhook():
     try:
         # 2. Path to your project folder on PythonAnywhere
         # Replace 'my_project' with your actual folder name
-        repo_path = '/home/jodh/my_project' 
+        repo_path = '/home/jodh/mysite/BlindVision' 
         repo = git.Repo(repo_path)
         
         # 3. Pull the latest code from the 'main' branch
