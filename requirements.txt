@@ -25,3 +25,4 @@ grpcio==1.60.0
 grpcio-status==1.60.0
 gTTS==2.3.2
 gunicorn==20.1.0
+git
