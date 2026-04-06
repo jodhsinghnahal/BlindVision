@@ -27,6 +27,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# todo: add security
 UPDATE_TOKEN = "your_super_secret_password_123"
 
 @app.route('/update_server', methods=['POST'])
@@ -37,16 +38,12 @@ def webhook():
         return "Unauthorized", 403
 
     try:
-        # 2. Path to your project folder on PythonAnywhere
-        # Replace 'my_project' with your actual folder name
         repo_path = '/home/jodh/mysite/BlindVision' 
         repo = git.Repo(repo_path)
         
-        # 3. Pull the latest code from the 'main' branch
         origin = repo.remotes.origin
         origin.pull()
         
-        # 4. Success! 
         # (Note: PythonAnywhere's WSGI server detects file changes 
         # and usually reloads automatically, or you can use the API to reload)
         return 'Updated PythonAnywhere successfully', 200
