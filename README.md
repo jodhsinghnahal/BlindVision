@@ -108,3 +108,31 @@ Same usage as **Image Chat Mode**.
 
 ### Real Time Mode ###
 Click the top button to speak the objects, the bottom button to speak objects and their relative position. Also using the Arduino, you can use the noise level to know the approximate distance to the object (louder means closer).
+
+
+## CI/CD (GitHub Actions -> PythonAnywhere)
+
+This repository now includes a workflow at `.github/workflows/ci-cd.yml`.
+
+- Pull requests to `main`: run CI only.
+- Pushes to `main`: run CI, then deploy to PythonAnywhere if CI passes.
+
+### Required GitHub Secrets
+
+Add these repository secrets in GitHub: `Settings -> Secrets and variables -> Actions`.
+
+- `PA_SSH_HOST`: usually `ssh.pythonanywhere.com`
+- `PA_SSH_USERNAME`: your PythonAnywhere username (example: `jodh`)
+- `PA_SSH_PRIVATE_KEY`: private SSH key for that PythonAnywhere account
+- `PA_APP_PATH`: full path to your app repo on PythonAnywhere (example: `/home/jodh/BlindVision`)
+- `PA_WSGI_FILE`: full path to your WSGI file (example: `/var/www/jodh_pythonanywhere_com_wsgi.py`)
+- `PA_VENV_PATH`: optional, path to your virtualenv (example: `/home/jodh/.virtualenvs/blindvision`)
+
+### What deploy does
+
+On push to `main`, GitHub Actions will:
+
+1. SSH into PythonAnywhere.
+2. Pull latest code from `main`.
+3. Install/update dependencies with `pip install -r requirements.txt`.
+4. Reload the web app by touching the WSGI file.
