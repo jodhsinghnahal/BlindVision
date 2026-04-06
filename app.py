@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect
+from flask import Flask, render_template, request, jsonify, session, redirect, abort
 import numpy as np
 #from ultralytics import YOLO
 import base64
@@ -11,6 +11,7 @@ from flask_session import Session
 import sqlite3
 import string
 import re
+import git
 
 letters_a_to_z = list(string.ascii_lowercase)
 
