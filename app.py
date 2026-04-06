@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session, redirect
 import numpy as np
-from ultralytics import YOLO
+#from ultralytics import YOLO
 import base64
 import io
 from PIL import Image
@@ -20,7 +20,7 @@ genai.configure(api_key = gemini_api_key)
 
 app = Flask(__name__)
 
-DATABASE = 'database/logins.db'
+DATABASE = '/home/jodh/mysite/BlindVision/database/logins.db'
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -63,7 +63,7 @@ def signup():
         db.close()
         right = "Retry"
         return render_template("login.html", right=right, letters=letters_a_to_z)
-    
+
     cursor.execute("INSERT INTO users (username, password) VALUES(?, ?)", (request.form.get("username"),request.form.get("password")))
     db.commit()
     db.close()
@@ -136,7 +136,7 @@ def image():
 def chat():
     if not session.get("username"):
         return redirect("/login")
-    
+
     if request.method == 'POST':
         data = request.json
 
@@ -154,9 +154,9 @@ def chat():
             print(mes[1])
             print(mes[0])
             history_.append({'parts': mes[1], 'role': 'user'})
-            history_.append({'parts': mes[0], 'role': 'model'}) 
+            history_.append({'parts': mes[0], 'role': 'model'})
         # Start the chat with the updated history
-        
+
         try:
             aichat = model.start_chat(history=history_)
 
@@ -182,12 +182,12 @@ def chat():
 
     else:
         return render_template("chat.html", letters=letters_a_to_z)
-    
+
 @app.route("/chat2", methods=['POST', 'GET'])
 def chat2():
     if not session.get("username"):
         return redirect("/login")
-    
+
     if request.method == 'POST':
         data = request.json
 
@@ -205,9 +205,9 @@ def chat2():
             print(mes[1])
             print(mes[0])
             history_.append({'parts': mes[1], 'role': 'user'})
-            history_.append({'parts': mes[0], 'role': 'model'}) 
+            history_.append({'parts': mes[0], 'role': 'model'})
         # Start the chat with the updated history
-        
+
         try:
             aichat = model.start_chat(history=history_)
 
@@ -233,150 +233,150 @@ def chat2():
 
     else:
         return render_template("chat2.html")
-    
+
 @app.route("/hist")
 def hist():
     if not session.get("username"):
         return redirect("/login")
-    
+
     db = connect_db()
     cursor = db.cursor()
     #parts = model message, role=user messsage
     hist = cursor.execute("SELECT DISTINCT parts, role FROM user_data JOIN users ON ((SELECT id FROM users where username = ?) = user_data.user_id) ORDER BY user_data.id ASC", (session["username"],)).fetchall()
-    db.close()        
-    
+    db.close()
+
     return render_template("chatHist.html", chat_history=hist)
 
-@app.route("/yolo", methods=['POST', 'GET'])
-def yolo():
-    if(not session["username"]):
-        return redirect('/login')
-    
-    if request.method == "POST":
+# @app.route("/yolo", methods=['POST', 'GET'])
+# def yolo():
+#     if(not session["username"]):
+#         return redirect('/login')
 
-        model = YOLO('other/yolov8n.pt')  # pretrained YOLOv8n model
-        data = request.json
+#     if request.method == "POST":
 
-        # Extract the base64-encoded image data
-        image_data = data.get("image", "")
+#         # model = YOLO('other/yolov8n.pt')  # pretrained YOLOv8n model
+#         data = request.json
 
-        # Remove the "data:image/jpeg;base64," prefix
-        _, encoded_image = image_data.split(",", 1)
+#         # Extract the base64-encoded image data
+#         image_data = data.get("image", "")
 
-        # Decode the base64-encoded image data
-        image_bytes = base64.b64decode(encoded_image)
+#         # Remove the "data:image/jpeg;base64," prefix
+#         _, encoded_image = image_data.split(",", 1)
 
-        # Convert the image bytes to a PIL Image
-        image = Image.open(io.BytesIO(image_bytes))
+#         # Decode the base64-encoded image data
+#         image_bytes = base64.b64decode(encoded_image)
 
-        im = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+#         # Convert the image bytes to a PIL Image
+#         image = Image.open(io.BytesIO(image_bytes))
 
-        result = model.predict(image) 
+#         im = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
-        names_ = result[0].names
+#         result = model.predict(image)
 
-        size = im.shape
+#         names_ = result[0].names
 
-        x_1 = size[1] / 3
-        y_1 = size[0] / 3
-        x_2 = 2*(size[1] / 3)
-        y_2 = size[0] / 3
-        x_3 = size[1] / 3
-        y_3 = 2*(size[0] / 3)
-        x_4 = 2*(size[1] / 3)
-        y_4 = 2*(size[0] / 3)
+#         size = im.shape
 
-        objs = {}
-        objspos = {}
-        relpos = []
+#         x_1 = size[1] / 3
+#         y_1 = size[0] / 3
+#         x_2 = 2*(size[1] / 3)
+#         y_2 = size[0] / 3
+#         x_3 = size[1] / 3
+#         y_3 = 2*(size[0] / 3)
+#         x_4 = 2*(size[1] / 3)
+#         y_4 = 2*(size[0] / 3)
 
-        i= 0
-        for obj in result[0].boxes.cls:
-            ob = str(obj)[7:9]
-            if ob[1] == '.':
-                ob = ob[0]
-            print(names_[int(ob)])
-            objs[i] = (names_[int(ob)])
-            i += 1
+#         objs = {}
+#         objspos = {}
+#         relpos = []
 
-        i=0
-        for obj in result[0].boxes.xyxy:
-            print(str(obj))
-            ob= str(obj)[8:]
-            print(ob)
-            ob = ob.split(', ')
-            print(ob)            
-            numsval = re.sub(r'[^0-9.e+\-]', '', ob[0])
-            print(numsval)
-            tlx = float(numsval)
-            numsval = re.sub(r'[^0-9.e+\-]', '', ob[1])
-            print(numsval)
-            tly = float(numsval)
-            numsval = re.sub(r'[^0-9.e+\-]', '', ob[2])
-            print(numsval)
-            brx = float(numsval)
-            numsval = re.sub(r'[^0-9.e+\-]', '', ob[3])
-            print(numsval)
-            bry = float(numsval)
-            centerx = (tlx+brx)/2
-            centery = (tly+bry)/2
-            objspos[i] = (centerx, centery)
-            print(objspos[i])
+#         i= 0
+#         for obj in result[0].boxes.cls:
+#             ob = str(obj)[7:9]
+#             if ob[1] == '.':
+#                 ob = ob[0]
+#             print(names_[int(ob)])
+#             objs[i] = (names_[int(ob)])
+#             i += 1
 
-            if centerx<x_1 and centery<y_1:
-                print("top left")
-                relpos.append((objs[i], "top left"))
-                print(objs[i])
-                print(objspos[i])
-            elif centerx>x_2 and centery<y_2:
-                print("top right")
-                relpos.append((objs[i], "top right"))
-                print(objs[i])
-                print(objspos[i])
-            elif centerx<x_3 and centery>y_3:
-                print("bottom left")
-                relpos.append((objs[i], "bottom left"))
-                print(objs[i])
-                print(objspos[i])
-            elif centerx > x_4 and centery > y_4:
-                print("bottom right")
-                relpos.append((objs[i], "bottom right"))
-                print(objs[i])
-                print(objspos[i])
-            elif centery < y_1:
-                print("top")
-                relpos.append((objs[i], "top"))
-                print(objs[i])
-                print(objspos[i])
-            elif centery > y_3:
-                print("bottom")
-                relpos.append((objs[i], "bottom"))
-                print(objs[i])
-                print(objspos[i])
-            elif centerx > x_2:
-                print("right")
-                relpos.append((objs[i], "right"))
-                print(objs[i])
-                print(objspos[i])
-            elif centerx < y_1:
-                print("left")
-                relpos.append((objs[i], "left"))
-                print(objs[i])
-                print(objspos[i])
-            else:
-                print("center")
-                relpos.append((objs[i], "center"))
-                print(objs[i])
-                print(objspos[i])
-            i+=1
-            
-        print(str(objs.values())[11:])
-        print(str(relpos))
-        if(str(objs.values())[11:] == '([])'):
-            return jsonify({'objs': '', 'objspos': ''})
-        return jsonify({'objs': str(objs.values())[11:], 'objspos': str(relpos)})
-    
-    return render_template('yolo.html')
+#         i=0
+#         for obj in result[0].boxes.xyxy:
+#             print(str(obj))
+#             ob= str(obj)[8:]
+#             print(ob)
+#             ob = ob.split(', ')
+#             print(ob)
+#             numsval = re.sub(r'[^0-9.e+\-]', '', ob[0])
+#             print(numsval)
+#             tlx = float(numsval)
+#             numsval = re.sub(r'[^0-9.e+\-]', '', ob[1])
+#             print(numsval)
+#             tly = float(numsval)
+#             numsval = re.sub(r'[^0-9.e+\-]', '', ob[2])
+#             print(numsval)
+#             brx = float(numsval)
+#             numsval = re.sub(r'[^0-9.e+\-]', '', ob[3])
+#             print(numsval)
+#             bry = float(numsval)
+#             centerx = (tlx+brx)/2
+#             centery = (tly+bry)/2
+#             objspos[i] = (centerx, centery)
+#             print(objspos[i])
+
+#             if centerx<x_1 and centery<y_1:
+#                 print("top left")
+#                 relpos.append((objs[i], "top left"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centerx>x_2 and centery<y_2:
+#                 print("top right")
+#                 relpos.append((objs[i], "top right"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centerx<x_3 and centery>y_3:
+#                 print("bottom left")
+#                 relpos.append((objs[i], "bottom left"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centerx > x_4 and centery > y_4:
+#                 print("bottom right")
+#                 relpos.append((objs[i], "bottom right"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centery < y_1:
+#                 print("top")
+#                 relpos.append((objs[i], "top"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centery > y_3:
+#                 print("bottom")
+#                 relpos.append((objs[i], "bottom"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centerx > x_2:
+#                 print("right")
+#                 relpos.append((objs[i], "right"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             elif centerx < y_1:
+#                 print("left")
+#                 relpos.append((objs[i], "left"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             else:
+#                 print("center")
+#                 relpos.append((objs[i], "center"))
+#                 print(objs[i])
+#                 print(objspos[i])
+#             i+=1
+
+#         print(str(objs.values())[11:])
+#         print(str(relpos))
+#         if(str(objs.values())[11:] == '([])'):
+#             return jsonify({'objs': '', 'objspos': ''})
+#         return jsonify({'objs': str(objs.values())[11:], 'objspos': str(relpos)})
+
+#     return render_template('yolo.html')
 
 if __name__ == "__main__":
     app.run(debug=True, port=4000, threaded=True)
